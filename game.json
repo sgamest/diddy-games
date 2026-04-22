@@ -1,10 +1,111 @@
 [
-  {
-    "name": "Game 1",
-    "url": "https://raw.githubusercontent.com/CoolDude2349/Offline-HTML-Games-Pack/main/offline/game1.html"
-  },
-  {
-    "name": "Game 2",
-    "url": "https://raw.githubusercontent.com/CoolDude2349/Offline-HTML-Games-Pack/main/offline/game2.html"
-  }
+  { "name": "1.12", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/1.12.html" },
+  { "name": "1.5", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/1.5.html" },
+  { "name": "1.8", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/1.8.html" },
+
+  { "name": "10 Minute Till Dawn", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/10minutestilldawn.html" },
+  { "name": "12 MiniBattles", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/12minibattles.html" },
+
+  { "name": "1v1.lol", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/1v1.lol.html" },
+  { "name": "2048", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/2048.html" },
+  { "name": "2048 Cupcakes", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/2048cupcakes.html" },
+
+  { "name": "3D Flight Simulator", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/3Dflightsimulator.html" },
+  { "name": "8 Ball Classic", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/8ballclassic.html" },
+
+  { "name": "Agario Lite", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/agariolite.html" },
+  { "name": "Age of War", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/ageofwar.html" },
+  { "name": "Age of War 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/ageofwar2.html" },
+
+  { "name": "Among Us", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/amongus.html" },
+  { "name": "Angry Birds", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/angrybirds.html" },
+  { "name": "Angry Birds Space", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/angrybirdsspace.html" },
+
+  { "name": "Awesome Tanks", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/awesometanks.html" },
+  { "name": "Awesome Tanks 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/awesometanks2.html" },
+
+  { "name": "Backrooms", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/backrooms.html" },
+  { "name": "Bad Ice Cream", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/badicecream.html" },
+  { "name": "Bad Ice Cream 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/badicecream2.html" },
+  { "name": "Bad Ice Cream 3", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/badicecream3.html" },
+
+  { "name": "Baldi's Basics", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/baldisbasics.html" },
+
+  { "name": "Basketball Legends", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/basketballlegends.html" },
+  { "name": "Basketball Stars", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/basketballstars.html" },
+
+  { "name": "BitLife", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bitlife.html" },
+  { "name": "Blocky Snakes", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/blockysnakes.html" },
+
+  { "name": "Bloons TD 1", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bloonsTD.html" },
+  { "name": "Bloons TD 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bloonsTD2.html" },
+  { "name": "Bloons TD 3", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bloonsTD3.html" },
+  { "name": "Bloons TD 4", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bloonsTD4.html" },
+  { "name": "Bloons TD 5", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bloonsTD5.html" },
+
+  { "name": "Bloxorz", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bloxorz.html" },
+  { "name": "Bob The Robber", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bobtherobber.html" },
+  { "name": "Bob The Robber 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bobtherobber2.html" },
+
+  { "name": "Bubbles Shooter", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/bubbleshooter.html" },
+
+  { "name": "Candy Crush", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/candycrush.html" },
+  { "name": "Capybara Clicker", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/capybaraclicker.html" },
+
+  { "name": "Chess", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/chess.html" },
+
+  { "name": "Cookie Clicker", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/cookieclicker.htm" },
+
+  { "name": "Crossy Road", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/crossyroad.htm" },
+
+  { "name": "Doodle Jump", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/doodlejump.html" },
+
+  { "name": "Drift Boss", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/driftboss.htm" },
+
+  { "name": "Duck Life 1", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/ducklife.html" },
+  { "name": "Duck Life 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/ducklife2.html" },
+  { "name": "Duck Life 3", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/ducklife3.html" },
+  { "name": "Duck Life 4", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/ducklife4.html" },
+
+  { "name": "Earn to Die", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/earntodie.html" },
+  { "name": "Earn to Die 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/earntodie2.html" },
+
+  { "name": "Flappy Bird", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/flappybird.html" },
+
+  { "name": "FNAF", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/fnaf.html" },
+  { "name": "FNAF 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/fnaf2.html" },
+  { "name": "FNAF 3", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/fnaf3.html" },
+  { "name": "FNAF 4", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/fnaf4.html" },
+
+  { "name": "Geometry Dash", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/geometrydash.html" },
+  { "name": "Geometry Dash Lite", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/geometrydashlite.html" },
+
+  { "name": "Happy Wheels", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/happywheels.html" },
+
+  { "name": "Idle Breakout", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/idlebreakout.html" },
+
+  { "name": "Jetpack Joyride", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/jetpackjoyride.html" },
+
+  { "name": "Learn to Fly", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/learntofly.html" },
+  { "name": "Learn to Fly 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/learntofly2.html" },
+  { "name": "Learn to Fly 3", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/learntofly3.html" },
+
+  { "name": "Moto X3M", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/motox3m.htm" },
+  { "name": "Moto X3M 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/motox3m2.html" },
+  { "name": "Moto X3M 3", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/motox3m3.html" },
+
+  { "name": "Pacman", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/pacman.html" },
+
+  { "name": "Paper.io 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/paperio2.htm" },
+
+  { "name": "Plants vs Zombies", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/plantsvszombies.html" },
+
+  { "name": "Slope", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/slope.html" },
+
+  { "name": "Temple Run 2", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/templerun2.htm" },
+
+  { "name": "Tunnel Rush", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/tunnelrush.html" },
+
+  { "name": "Vex 4", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/vex4.html" },
+  { "name": "Vex 5", "url": "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/vex5.html" }
 ]

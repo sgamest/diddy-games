@@ -125,7 +125,7 @@ const frame = document.getElementById("frame");
 const title = document.getElementById("title");
 const search = document.getElementById("search");
 
-// Load games
+// 🔥 Load games.json
 async function loadGames() {
   try {
     const res = await fetch("games.json");
@@ -137,7 +137,7 @@ async function loadGames() {
   }
 }
 
-// Render list
+// 🔥 Render list
 function render(data) {
   list.innerHTML = "";
 
@@ -151,25 +151,18 @@ function render(data) {
 
       let url = game.url;
 
-      // ✅ REPO SUPPORT (only if defined)
+      // 🔥 AUTO HANDLE REPOS
       if (game.repo) {
         url = `https://rawcdn.githack.com/${game.repo}/main/index.html`;
+      }
+
+      // ✅ If it's a full HTML file → use src (BEST)
+      if (url && url.endsWith(".html")) {
         frame.src = url;
         return;
       }
 
-      if (!url) {
-        frame.srcdoc = "<h2 style='color:red'>No URL provided</h2>";
-        return;
-      }
-
-      // ✅ If it's a normal HTML file (local or raw)
-      if (url.endsWith(".html")) {
-        frame.src = url;
-        return;
-      }
-
-      // ✅ Fallback (ONLY for special inline/raw cases)
+      // ✅ fallback (for single-file games)
       try {
         const res = await fetch(url);
         const html = await res.text();
@@ -189,18 +182,21 @@ function render(data) {
   });
 }
 
-// Fullscreen
+// 🔥 Fullscreen
 function fullscreenGame() {
   if (!frame.src && !frame.srcdoc) {
     alert("Load a game first");
     return;
   }
 
-  if (frame.requestFullscreen) frame.requestFullscreen();
-  else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+  if (frame.requestFullscreen) {
+    frame.requestFullscreen();
+  } else if (frame.webkitRequestFullscreen) {
+    frame.webkitRequestFullscreen();
+  }
 }
 
-// Search
+// 🔍 Search
 search.addEventListener("input", () => {
   const term = search.value.toLowerCase();
   render(games.filter(g => g.name.toLowerCase().includes(term)));

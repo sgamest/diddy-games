@@ -69,6 +69,25 @@ input {
   color: #ffd966;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.topbar-right {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: #2a2a40;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+button:hover {
+  background: #3a3a5a;
 }
 
 iframe {
@@ -90,8 +109,13 @@ iframe {
 <div class="main">
   <div class="topbar">
     <span id="title">Select a game</span>
-    <span>GitHub Arcade</span>
+
+    <div class="topbar-right">
+      <button onclick="fullscreenGame()">⛶ Fullscreen</button>
+      <span>GitHub Arcade</span>
+    </div>
   </div>
+
   <iframe id="frame"></iframe>
 </div>
 
@@ -103,7 +127,7 @@ const frame = document.getElementById("frame");
 const title = document.getElementById("title");
 const search = document.getElementById("search");
 
-// Load games from JSON (NO API = FIXED)
+// Load games
 async function loadGames() {
   try {
     const res = await fetch("games.json");
@@ -130,7 +154,6 @@ function render(data) {
         const res = await fetch(game.url);
         const html = await res.text();
 
-        // safety check (prevents your "]]>" issue)
         if (!html || html.trim().length < 50) {
           frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
           return;
@@ -146,7 +169,23 @@ function render(data) {
   });
 }
 
-// Search filter
+// Fullscreen function
+function fullscreenGame() {
+  if (!frame.srcdoc && !frame.src) {
+    alert("Load a game first");
+    return;
+  }
+
+  if (frame.requestFullscreen) {
+    frame.requestFullscreen();
+  } else if (frame.webkitRequestFullscreen) {
+    frame.webkitRequestFullscreen();
+  } else if (frame.msRequestFullscreen) {
+    frame.msRequestFullscreen();
+  }
+}
+
+// Search
 search.addEventListener("input", () => {
   const term = search.value.toLowerCase();
   render(games.filter(g => g.name.toLowerCase().includes(term)));

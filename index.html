@@ -1,33 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Game Hub</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body { margin:0; font-family:Arial; background:#111; color:white; }
+
+    header { padding:10px; background:#222; display:flex; gap:10px; }
+
+    #games { padding:10px; display:grid; grid-template-columns:repeat(auto-fill,150px); gap:10px; }
+
+    .card { background:#333; padding:10px; cursor:pointer; border-radius:8px; }
+
+    #modal {
+      position:fixed;
+      inset:0;
+      background:black;
+      display:none;
+      flex-direction:column;
+    }
+
+    #bar {
+      background:#222;
+      padding:10px;
+      display:flex;
+      justify-content:space-between;
+    }
+
+    iframe {
+      flex:1;
+      width:100%;
+      border:none;
+    }
+
+    button { background:red; color:white; border:none; padding:6px; }
+  </style>
 </head>
 <body>
 
 <header>
-  <h1>🎮 Game Hub</h1>
-  <input id="search" placeholder="Search games...">
+  <input id="search" placeholder="search">
 </header>
 
-<main>
-  <div id="games"></div>
-</main>
+<div id="games"></div>
 
-<!-- GAME MODAL -->
-<div id="gameModal" class="hidden">
-  <div id="topBar">
-    <span id="gameTitle"></span>
-    <button id="closeBtn">❌ Close</button>
+<div id="modal">
+  <div id="bar">
+    <span id="title"></span>
+    <button onclick="closeGame()">Close</button>
   </div>
-
-  <iframe id="gameFrame" allowfullscreen></iframe>
+  <iframe id="frame"></iframe>
 </div>
 
-<script src="loader.js"></script>
+<script>
+let games = [];
+
+fetch("games.json")
+  .then(r => r.json())
+  .then(data => {
+    games = data;
+    render(data);
+  })
+  .catch(err => {
+    document.body.innerHTML = "<h1>games.json failed to load</h1>";
+    console.log(err);
+  });
+
+function render(list){
+  const g = document.getElementById("games");
+  g.innerHTML = "";
+
+  list.forEach(game => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerText = game.name;
+
+    div.onclick = () => {
+      document.getElementById("modal").style.display = "flex";
+      document.getElementById("frame").src = game.url;
+      document.getElementById("title").innerText = game.name;
+    };
+
+    g.appendChild(div);
+  });
+}
+
+function closeGame(){
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("frame").src = "";
+}
+
+document.getElementById("search").addEventListener("input", e=>{
+  const q = e.target.value.toLowerCase();
+  render(games.filter(g => g.name.toLowerCase().includes(q)));
+});
+</script>
 
 </body>
 </html>

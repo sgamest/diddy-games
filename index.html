@@ -17,15 +17,17 @@
   <div id="games"></div>
 </main>
 
-<!-- Game modal -->
+<!-- GAME MODAL -->
 <div id="gameModal" class="hidden">
   <div id="topBar">
-    <button onclick="closeGame()">❌ Close</button>
     <span id="gameTitle"></span>
+    <button id="closeBtn">❌ Close</button>
   </div>
-  <iframe id="gameFrame"></iframe>
+
+  <iframe id="gameFrame" allowfullscreen></iframe>
 </div>
 
 <script src="loader.js"></script>
+
 </body>
 </html>

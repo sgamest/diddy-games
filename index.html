@@ -1,123 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=0.75">
-<title>Learn Science</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0c29;
-  color: white;
-  display: flex;
-  height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 280px;
-  background: #1a1a2e;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  padding: 12px;
-  text-align: center;
-  font-weight: bold;
-  color: #ffd966;
-  border-bottom: 1px solid #333;
-}
-
-input {
-  padding: 10px;
-  border: none;
-  outline: none;
-  background: #111;
-  color: white;
-}
-
-.list {
-  overflow-y: auto;
-  flex: 1;
-}
-
-.game {
-  padding: 10px;
-  margin: 6px;
-  background: #2a2a40;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.game:hover {
-  background: #3a3a5a;
-}
-
-/* Main */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.topbar {
-  background: #111;
-  padding: 10px;
-  color: #ffd966;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.topbar-right {
-  display: flex;
-  gap: 10px;
-}
-
-button {
-  background: #2a2a40;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-button:hover {
-  background: #3a3a5a;
-}
-
-iframe {
-  flex: 1;
-  border: none;
-  background: white;
-}
-</style>
-</head>
-
-<body>
-
-<div class="sidebar">
-  <div class="header"> Diddy Games</div>
-  <input id="search" placeholder="Search games...">
-  <div class="list" id="list">Loading...</div>
-</div>
-
-<div class="main">
-  <div class="topbar">
-    <span id="title">Select a game</span>
-
-    <div class="topbar-right">
-      <button onclick="fullscreenGame()">⛶ Fullscreen</button>
-    </div>
-  </div>
-
-  <iframe id="frame"></iframe>
-</div>
-
 <script>
 let games = [];
 
@@ -132,8 +12,39 @@ async function loadGames() {
     const res = await fetch("games.json");
     games = await res.json();
     render(games);
+
+    // restore last played game
+    const saved = localStorage.getItem("lastGame");
+    if (saved) {
+      const game = games.find(g => g.name === saved);
+      if (game) loadGame(game);
+    }
+
   } catch (e) {
     list.innerHTML = "Failed to load games.json";
+  }
+}
+
+// Load a game
+async function loadGame(game) {
+  title.textContent = game.name;
+
+  // SAVE game name
+  localStorage.setItem("lastGame", game.name);
+
+  try {
+    const res = await fetch(game.url);
+    const html = await res.text();
+
+    if (!html || html.trim().length < 50) {
+      frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
+      return;
+    }
+
+    frame.srcdoc = html;
+
+  } catch (err) {
+    frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
   }
 }
 
@@ -146,23 +57,7 @@ function render(data) {
     div.className = "game";
     div.textContent = game.name;
 
-    div.onclick = async () => {
-      title.textContent = game.name;
-
-      try {
-        const res = await fetch(game.url);
-        const html = await res.text();
-
-        if (!html || html.trim().length < 50) {
-          frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
-          return;
-        }
-
-        frame.srcdoc = html;
-      } catch (err) {
-        frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
-      }
-    };
+    div.onclick = () => loadGame(game);
 
     list.appendChild(div);
   });
@@ -192,6 +87,3 @@ search.addEventListener("input", () => {
 
 loadGames();
 </script>
-
-</body>
-</html>

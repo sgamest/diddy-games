@@ -3,82 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=0.75">
-<title>Diddy Games</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Learn Science</title>
 
 <style>
-:root {
-  --bg:#0b0b1a;
-  --sidebar-bg:#111128;
-  --card:#1c1c38;
-  --accent:#f5c842;
-  --text:#e8e8ff;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0c29;
+  color: white;
+  display: flex;
+  height: 100vh;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-  display:flex;
-  height:100vh;
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Nunito';
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar{
-  width:260px;
-  background:var(--sidebar-bg);
-  overflow:auto;
+.header {
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  color: #ffd966;
+  border-bottom: 1px solid #333;
 }
 
-.list{padding:10px;}
-
-.game-item{
-  padding:8px;
-  border-radius:6px;
-  cursor:pointer;
-}
-.game-item:hover{background:var(--card);}
-
-.main{flex:1;display:flex;flex-direction:column;}
-
-.topbar{
-  padding:10px;
-  background:#0f0f22;
-  display:flex;
-  gap:10px;
+input {
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: #111;
+  color: white;
 }
 
-#homepage{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.list {
+  overflow-y: auto;
+  flex: 1;
 }
 
-#game-container{
-  flex:1;
-  display:none;
-  position:relative;
-}
-#game-container.active{display:flex;}
-
-#frame{
-  flex:1;
-  border:none;
-  width:100%;
-  height:100%;
+.game {
+  padding: 10px;
+  margin: 6px;
+  background: #2a2a40;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-#loading{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:black;
-  z-index:10;
+.game:hover {
+  background: #3a3a5a;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: #111;
+  padding: 10px;
+  color: #ffd966;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar-right {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: #2a2a40;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+button:hover {
+  background: #3a3a5a;
+}
+
+iframe {
+  flex: 1;
+  border: none;
+  background: white;
 }
 </style>
 </head>
@@ -86,121 +101,112 @@ body{
 <body>
 
 <div class="sidebar">
+  <div class="header"> Diddy Games</div>
+  <input id="search" placeholder="Search games...">
   <div class="list" id="list">Loading...</div>
 </div>
 
 <div class="main">
   <div class="topbar">
-    <button onclick="showHome()">Home</button>
+    <span id="title">Select a game</span>
+
+    <div class="topbar-right">
+      <button onclick="fullscreenGame()">⛶ Fullscreen</button>
+    </div>
   </div>
 
-  <div id="homepage">
-    <h1>🎮 Select a Game</h1>
-  </div>
-
-  <div id="game-container">
-    <div id="loading">Loading...</div>
-    <iframe id="frame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"></iframe>
-  </div>
+  <iframe id="frame"></iframe>
 </div>
 
 <script>
 let games = [];
-let currentBlobUrl = null;
 
-const frame = document.getElementById("frame");
 const list = document.getElementById("list");
-const loading = document.getElementById("loading");
-const homepage = document.getElementById("homepage");
-const gameContainer = document.getElementById("game-container");
+const frame = document.getElementById("frame");
+const title = document.getElementById("title");
+const search = document.getElementById("search");
 
-/* 🔥 Convert raw GitHub → jsDelivr */
-function fixUrl(url){
-  if(url.includes("raw.githubusercontent.com")){
-    const parts = url.split("/");
-    const user = parts[3];
-    const repo = parts[4];
-    const branch = parts[5];
-    const path = parts.slice(6).join("/");
-    return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
+// Load games
+async function loadGames() {
+  try {
+    const res = await fetch("games.json");
+    games = await res.json();
+    render(games);
+
+    // restore last game
+    const saved = localStorage.getItem("lastGame");
+    if (saved) {
+      const game = games.find(g => g.name === saved);
+      if (game) {
+        setTimeout(() => {
+          const items = document.querySelectorAll(".game");
+          const index = games.findIndex(g => g.name === saved);
+          if (items[index]) items[index].click();
+        }, 300);
+      }
+    }
+
+  } catch (e) {
+    list.innerHTML = "Failed to load games.json";
   }
-  return url;
 }
 
-/* Load game list */
-async function loadGames(){
-  const res = await fetch("games.json");
-  games = await res.json();
+// Render list
+function render(data) {
+  list.innerHTML = "";
 
-  list.innerHTML="";
-  games.forEach(g=>{
-    const div=document.createElement("div");
-    div.className="game-item";
-    div.textContent=g.name;
-    div.onclick=()=>launchGame(g);
+  data.forEach(game => {
+    const div = document.createElement("div");
+    div.className = "game";
+    div.textContent = game.name;
+
+    div.onclick = async () => {
+      title.textContent = game.name;
+
+      // SAVE GAME
+      localStorage.setItem("lastGame", game.name);
+
+      try {
+        const res = await fetch(game.url);
+        const html = await res.text();
+
+        if (!html || html.trim().length < 50) {
+          frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
+          return;
+        }
+
+        frame.srcdoc = html;
+      } catch (err) {
+        frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
+      }
+    };
+
     list.appendChild(div);
   });
 }
 
-/* Launch game (SMART LOADER) */
-async function launchGame(game){
-  homepage.style.display="none";
-  gameContainer.classList.add("active");
-  loading.style.display="flex";
-
-  if(currentBlobUrl){
-    URL.revokeObjectURL(currentBlobUrl);
-    currentBlobUrl=null;
+// Fullscreen function
+function fullscreenGame() {
+  if (!frame.srcdoc && !frame.src) {
+    alert("Load a game first");
+    return;
   }
 
-  let url = fixUrl(game.url);
-
-  try{
-    // Try HEAD (size check)
-    let size = 0;
-    try{
-      const head = await fetch(url,{method:"HEAD"});
-      size = parseInt(head.headers.get("content-length")||"0");
-    }catch{}
-
-    // 🔥 BIG FILE → direct stream
-    if(size > 15000000){
-      frame.src = url;
-    } else {
-      // 🔧 SMALL FILE → blob for fixing paths
-      const res = await fetch(url);
-      let html = await res.text();
-
-      const base = url.substring(0,url.lastIndexOf("/")+1);
-
-      if(!html.includes("<base")){
-        html = html.replace(/<head[^>]*>/i, m=>m+`<base href="${base}">`);
-      }
-
-      const blob = new Blob([html],{type:"text/html"});
-      currentBlobUrl = URL.createObjectURL(blob);
-
-      frame.src = currentBlobUrl;
-    }
-
-  }catch{
-    // fallback
-    frame.src = url;
+  if (frame.requestFullscreen) {
+    frame.requestFullscreen();
+  } else if (frame.webkitRequestFullscreen) {
+    frame.webkitRequestFullscreen();
+  } else if (frame.msRequestFullscreen) {
+    frame.msRequestFullscreen();
   }
-
-  frame.onload=()=>{
-    loading.style.display="none";
-    frame.contentWindow?.focus();
-  };
 }
 
-/* Home */
-function showHome(){
-  homepage.style.display="flex";
-  gameContainer.classList.remove("active");
-}
+// Search
+search.addEventListener("input", () => {
+  const term = search.value.toLowerCase();
+  render(games.filter(g => g.name.toLowerCase().includes(term)));
+});
 
-/* Init */
 loadGames();
 </script>
 

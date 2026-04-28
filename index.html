@@ -3,212 +3,601 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=0.75">
-<title>Learn Science</title>
-
+<title>Diddy Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0c29;
-  color: white;
-  display: flex;
-  height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 280px;
-  background: #1a1a2e;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  padding: 12px;
-  text-align: center;
-  font-weight: bold;
-  color: #ffd966;
-  border-bottom: 1px solid #333;
-}
-
-input {
-  padding: 10px;
-  border: none;
-  outline: none;
-  background: #111;
-  color: white;
-}
-
-.list {
-  overflow-y: auto;
-  flex: 1;
-}
-
-.game {
-  padding: 10px;
-  margin: 6px;
-  background: #2a2a40;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.game:hover {
-  background: #3a3a5a;
-}
-
-/* Main */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.topbar {
-  background: #111;
-  padding: 10px;
-  color: #ffd966;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.topbar-right {
-  display: flex;
-  gap: 10px;
-}
-
-button {
-  background: #2a2a40;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-button:hover {
-  background: #3a3a5a;
-}
-
-iframe {
-  flex: 1;
-  border: none;
-  background: white;
-}
+  :root {
+    --bg: #0b0b1a;
+    --sidebar-bg: #111128;
+    --card: #1c1c38;
+    --card-hover: #252548;
+    --accent: #f5c842;
+    --accent2: #ff5f7e;
+    --accent3: #5bf5c0;
+    --text: #e8e8ff;
+    --muted: #7a7aaa;
+    --radius: 10px;
+  }
+ 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+ 
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 270px;
+    min-width: 270px;
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+    border-right: 1px solid #222244;
+  }
+ 
+  .sidebar.closed {
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+  }
+ 
+  .sidebar-header {
+    padding: 16px 14px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #222244;
+  }
+ 
+  .logo-link {
+    font-family: 'Bungee', cursive;
+    font-size: 1.25rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-shadow: 0 0 16px rgba(245,200,66,0.4);
+    transition: color 0.2s;
+    flex: 1;
+  }
+  .logo-link:hover { color: #ffe580; }
+ 
+  .logo-emoji { font-size: 1.3rem; }
+ 
+  .search-wrap {
+    padding: 10px 10px 6px;
+    position: relative;
+  }
+ 
+  .search-wrap input {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    border: 1px solid #333355;
+    border-radius: var(--radius);
+    background: #0f0f22;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap::before {
+    content: "🔍";
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    pointer-events: none;
+  }
+ 
+  .game-count {
+    padding: 4px 14px 6px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+ 
+  .list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 4px 8px 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #333355 transparent;
+  }
+  .list::-webkit-scrollbar { width: 5px; }
+  .list::-webkit-scrollbar-thumb { background: #333355; border-radius: 10px; }
+ 
+  .game-item {
+    padding: 9px 12px;
+    margin: 3px 0;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.15s, color 0.15s;
+    color: #c0c0e0;
+  }
+  .game-item:hover { background: var(--card); color: var(--text); }
+  .game-item.active { background: var(--card-hover); color: var(--accent); }
+ 
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+ 
+  .topbar {
+    background: #0f0f22;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #222244;
+    min-height: 48px;
+  }
+ 
+  .hamburger {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .hamburger:hover { background: var(--card); }
+ 
+  .topbar-title {
+    flex: 1;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+ 
+  .topbar-btn {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid #333355;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .topbar-btn:hover { background: var(--card-hover); border-color: var(--accent); color: var(--accent); }
+ 
+  /* ── Homepage ── */
+  #homepage {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px 36px 40px;
+    scrollbar-width: thin;
+    scrollbar-color: #333355 transparent;
+  }
+ 
+  .home-hero {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+ 
+  .home-hero h1 {
+    font-family: 'Bungee', cursive;
+    font-size: 2.8rem;
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(245,200,66,0.3);
+    line-height: 1.1;
+  }
+ 
+  .home-hero p {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+ 
+  .section-label {
+    font-family: 'Bungee', cursive;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, #ff5f7e33, transparent);
+  }
+ 
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+ 
+  .rec-card {
+    background: var(--card);
+    border: 1px solid #252548;
+    border-radius: var(--radius);
+    padding: 18px 14px 14px;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s, background 0.15s;
+    text-align: center;
+  }
+  .rec-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background: var(--card-hover);
+  }
+ 
+  .rec-card .card-emoji {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .rec-card .card-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .rec-card .card-tag {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.68rem;
+    background: #2a2a50;
+    border-radius: 20px;
+    padding: 2px 8px;
+    color: var(--muted);
+  }
+ 
+  /* ── Game iframe ── */
+  #game-container {
+    flex: 1;
+    display: none;
+    position: relative;
+  }
+  #game-container.active { display: flex; }
+ 
+  #frame {
+    flex: 1;
+    border: none;
+    background: #111;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+ 
+  /* Loading overlay */
+  #loading {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  #loading.hidden { opacity: 0; }
+ 
+  .spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #222244;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+ 
+  .loading-text {
+    font-family: 'Bungee', cursive;
+    color: var(--accent);
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
 </style>
 </head>
-
 <body>
-
-<div class="sidebar">
-  <div class="header"> Diddy Games</div>
-  <input id="search" placeholder="Search games...">
+ 
+<!-- ── Sidebar ── -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="logo-emoji">🎮</span>
+    <a class="logo-link" href="#" onclick="showHome(); return false;">Diddy Games</a>
+  </div>
+  <div class="search-wrap">
+    <input id="search" placeholder="Search games..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="game-count" id="game-count"></div>
   <div class="list" id="list">Loading...</div>
 </div>
-
+ 
+<!-- ── Main ── -->
 <div class="main">
   <div class="topbar">
-    <span id="title">Select a game</span>
-
-    <div class="topbar-right">
-      <button onclick="fullscreenGame()">⛶ Fullscreen</button>
-    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleSidebar()" title="Toggle sidebar">☰</button>
+    <span class="topbar-title" id="title">🏠 Home</span>
+    <button class="topbar-btn" id="fs-btn" onclick="fullscreenGame()" style="display:none">⛶ Fullscreen</button>
+    <button class="topbar-btn" onclick="showHome()">🏠 Home</button>
   </div>
-
-  <iframe id="frame"></iframe>
+ 
+  <!-- Homepage -->
+  <div id="homepage">
+    <div class="home-hero">
+      <h1>🎮 Diddy Games</h1>
+      <p>Pick a game from the sidebar — or jump into a fan favourite below</p>
+    </div>
+ 
+    <div class="section-label">⚡ TOP PICKS</div>
+    <div class="rec-grid" id="rec-grid"></div>
+ 
+    <div class="section-label">🏃 RUNNERS & ENDLESS</div>
+    <div class="rec-grid" id="rec-runners"></div>
+ 
+    <div class="section-label">🧩 PUZZLE & STRATEGY</div>
+    <div class="rec-grid" id="rec-puzzle"></div>
+ 
+    <div class="section-label">🏎 RACING & DRIVING</div>
+    <div class="rec-grid" id="rec-racing"></div>
+  </div>
+ 
+  <!-- Game container -->
+  <div id="game-container">
+    <div id="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading game…</div>
+    </div>
+    <iframe
+      id="frame"
+      allow="autoplay; fullscreen; pointer-lock; gamepad; cross-origin-isolated"
+      allowfullscreen
+      tabindex="0"
+    ></iframe>
+  </div>
 </div>
-
+ 
 <script>
 let games = [];
-
-const list = document.getElementById("list");
-const frame = document.getElementById("frame");
-const title = document.getElementById("title");
-const search = document.getElementById("search");
-
-// Load games
+let currentBlobUrl = null;
+let sidebarOpen = true;
+ 
+const list       = document.getElementById("list");
+const frame      = document.getElementById("frame");
+const title      = document.getElementById("title");
+const search     = document.getElementById("search");
+const homepage   = document.getElementById("homepage");
+const gameContainer = document.getElementById("game-container");
+const loading    = document.getElementById("loading");
+const sidebar    = document.getElementById("sidebar");
+const gameCount  = document.getElementById("game-count");
+const fsBtn      = document.getElementById("fs-btn");
+ 
+// ── Recommended sections ─────────────────────────────────────────────────────
+const recommended = [
+  { name: "Run 3",             emoji: "🏃", tag: "Endless" },
+  { name: "Slope",             emoji: "🔴", tag: "Endless" },
+  { name: "Geometry Dash",     emoji: "📐", tag: "Rhythm" },
+  { name: "Cookie Clicker",    emoji: "🍪", tag: "Idle" },
+  { name: "Among Us",          emoji: "🚀", tag: "Social" },
+  { name: "Minecraft 1.12",    emoji: "⛏️",  tag: "Sandbox" },
+  { name: "Retro Bowl",        emoji: "🏈", tag: "Sports" },
+  { name: "Happy Wheels",      emoji: "🚲", tag: "Physics" },
+  { name: "Pac-Man",           emoji: "👻", tag: "Arcade" },
+  { name: "Bloons TD 5",       emoji: "🎈", tag: "Tower Def" },
+];
+const runners = [
+  { name: "Temple Run 2",      emoji: "🏛️", tag: "Runner" },
+  { name: "Subway Surfers Beijing", emoji: "🚇", tag: "Runner" },
+  { name: "Doodle Jump",       emoji: "🐸", tag: "Jumper" },
+  { name: "Flappy Bird",       emoji: "🐦", tag: "Arcade" },
+  { name: "Jetpack Joyride",   emoji: "🚀", tag: "Runner" },
+  { name: "Tunnel Rush",       emoji: "🕳️", tag: "Endless" },
+  { name: "Helix Jump",        emoji: "🌀", tag: "Skill" },
+  { name: "OvO",               emoji: "🥚", tag: "Platformer" },
+];
+const puzzle = [
+  { name: "2048",              emoji: "🔢", tag: "Puzzle" },
+  { name: "Minesweeper",       emoji: "💣", tag: "Logic" },
+  { name: "Chess",             emoji: "♟️", tag: "Strategy" },
+  { name: "Cut The Rope",      emoji: "✂️", tag: "Puzzle" },
+  { name: "The Impossible Quiz", emoji: "❓", tag: "Quiz" },
+  { name: "Wordle Unlimited",  emoji: "🔤", tag: "Word" },
+  { name: "Bloxorz",           emoji: "📦", tag: "Puzzle" },
+  { name: "Plants Vs Zombies", emoji: "🌻", tag: "Strategy" },
+];
+const racing = [
+  { name: "Moto X3M",          emoji: "🏍️", tag: "Stunt" },
+  { name: "Drift Boss",        emoji: "🚗", tag: "Driving" },
+  { name: "Hill Climb Racing Lite", emoji: "🚙", tag: "Physics" },
+  { name: "Drive Mad",         emoji: "😤", tag: "Driving" },
+  { name: "Madalin Stunt Cars 2", emoji: "🏎️", tag: "Stunt" },
+  { name: "Poly Track",        emoji: "🛤️", tag: "Racing" },
+  { name: "Earn To Die 2",     emoji: "🧟", tag: "Driving" },
+  { name: "Snow Rider",        emoji: "🏂", tag: "Racing" },
+];
+ 
+function buildRecGrid(containerId, items) {
+  const el = document.getElementById(containerId);
+  items.forEach(rec => {
+    const div = document.createElement("div");
+    div.className = "rec-card";
+    div.innerHTML = `<span class="card-emoji">${rec.emoji}</span><div class="card-name">${rec.name}</div><span class="card-tag">${rec.tag}</span>`;
+    div.onclick = () => launchGameByName(rec.name);
+    el.appendChild(div);
+  });
+}
+ 
+// ── Sidebar toggle ────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  sidebar.classList.toggle("closed", !sidebarOpen);
+}
+ 
+// ── Show home ─────────────────────────────────────────────────────────────────
+function showHome() {
+  homepage.style.display = "block";
+  gameContainer.classList.remove("active");
+  title.textContent = "🏠 Home";
+  fsBtn.style.display = "none";
+  document.querySelectorAll(".game-item").forEach(el => el.classList.remove("active"));
+}
+ 
+// ── Load games list ──────────────────────────────────────────────────────────
 async function loadGames() {
   try {
     const res = await fetch("games.json");
     games = await res.json();
     render(games);
-
-    // restore last game
+    buildRecGrid("rec-grid",    recommended);
+    buildRecGrid("rec-runners", runners);
+    buildRecGrid("rec-puzzle",  puzzle);
+    buildRecGrid("rec-racing",  racing);
+ 
+    // Restore last game
     const saved = localStorage.getItem("lastGame");
     if (saved) {
       const game = games.find(g => g.name === saved);
-      if (game) {
-        setTimeout(() => {
-          const items = document.querySelectorAll(".game");
-          const index = games.findIndex(g => g.name === saved);
-          if (items[index]) items[index].click();
-        }, 300);
-      }
+      if (game) setTimeout(() => launchGame(game), 400);
     }
-
   } catch (e) {
-    list.innerHTML = "Failed to load games.json";
+    list.innerHTML = "<div style='padding:12px;color:#ff5f7e;font-size:0.85rem'>Failed to load games.json</div>";
   }
 }
-
-// Render list
+ 
+// ── Render sidebar list ───────────────────────────────────────────────────────
 function render(data) {
   list.innerHTML = "";
-
+  gameCount.textContent = `${data.length} games`;
+ 
   data.forEach(game => {
     const div = document.createElement("div");
-    div.className = "game";
+    div.className = "game-item";
     div.textContent = game.name;
-
-    div.onclick = async () => {
-      title.textContent = game.name;
-
-      // SAVE GAME
-      localStorage.setItem("lastGame", game.name);
-
-      try {
-        const res = await fetch(game.url);
-        const html = await res.text();
-
-        if (!html || html.trim().length < 50) {
-          frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
-          return;
-        }
-
-        frame.srcdoc = html;
-      } catch (err) {
-        frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
-      }
-    };
-
+    div.dataset.name = game.name;
+    div.onclick = () => launchGame(game);
     list.appendChild(div);
   });
 }
-
-// Fullscreen function
-function fullscreenGame() {
-  if (!frame.srcdoc && !frame.src) {
-    alert("Load a game first");
-    return;
+ 
+// ── Launch game ───────────────────────────────────────────────────────────────
+async function launchGame(game) {
+  // Update UI
+  title.textContent = game.name;
+  fsBtn.style.display = "inline-flex";
+  homepage.style.display = "none";
+  gameContainer.classList.add("active");
+  loading.classList.remove("hidden");
+ 
+  document.querySelectorAll(".game-item").forEach(el => {
+    el.classList.toggle("active", el.dataset.name === game.name);
+  });
+ 
+  localStorage.setItem("lastGame", game.name);
+ 
+  // Revoke previous blob URL to avoid memory leak
+  if (currentBlobUrl) {
+    URL.revokeObjectURL(currentBlobUrl);
+    currentBlobUrl = null;
   }
-
-  if (frame.requestFullscreen) {
-    frame.requestFullscreen();
-  } else if (frame.webkitRequestFullscreen) {
-    frame.webkitRequestFullscreen();
-  } else if (frame.msRequestFullscreen) {
-    frame.msRequestFullscreen();
+ 
+  try {
+    const res = await fetch(game.url);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    let html = await res.text();
+ 
+    if (!html || html.trim().length < 50) throw new Error("Empty response");
+ 
+    // Inject <base> so any relative sub-resources resolve correctly
+    const baseUrl = game.url.substring(0, game.url.lastIndexOf("/") + 1);
+    if (!html.includes("<base")) {
+      html = html.replace(/(<head[^>]*>)/i, `$1<base href="${baseUrl}">`);
+    }
+ 
+    // Use a blob URL — far better input handling than srcdoc
+    const blob = new Blob([html], { type: "text/html; charset=utf-8" });
+    currentBlobUrl = URL.createObjectURL(blob);
+    frame.src = currentBlobUrl;
+ 
+    // Hide loading once iframe fires load
+    frame.onload = () => {
+      loading.classList.add("hidden");
+      // Give the iframe window focus so keyboard input works immediately
+      frame.contentWindow?.focus();
+    };
+ 
+  } catch (err) {
+    frame.srcdoc = `<body style="background:#111;color:#ff5f7e;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;font-size:1.2rem">⚠️ Could not load game</body>`;
+    loading.classList.add("hidden");
   }
 }
-
-// Search
+ 
+// Focus iframe on click so keyboard input always works
+gameContainer.addEventListener("click", () => {
+  try { frame.contentWindow?.focus(); } catch(e) {}
+});
+ 
+// ── Launch by name (for homepage cards) ─────────────────────────────────────
+function launchGameByName(name) {
+  const game = games.find(g => g.name === name);
+  if (game) {
+    launchGame(game);
+    // Scroll the sidebar item into view
+    const item = list.querySelector(`[data-name="${CSS.escape(name)}"]`);
+    if (item) item.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+}
+ 
+// ── Fullscreen ───────────────────────────────────────────────────────────────
+function fullscreenGame() {
+  const el = frame;
+  if (el.requestFullscreen)            el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if (el.msRequestFullscreen)     el.msRequestFullscreen();
+}
+ 
+// ── Search ───────────────────────────────────────────────────────────────────
 search.addEventListener("input", () => {
   const term = search.value.toLowerCase();
   render(games.filter(g => g.name.toLowerCase().includes(term)));
 });
-
+ 
+// ── Init ─────────────────────────────────────────────────────────────────────
 loadGames();
 </script>
-
+ 
 </body>
 </html>
+ 

@@ -18,9 +18,13 @@
     --muted: #7a7aaa;
     --radius: 10px;
   }
- 
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
+  html, body {
+    overscroll-behavior: none;
+  }
+
   body {
     font-family: 'Nunito', sans-serif;
     background: var(--bg);
@@ -29,7 +33,7 @@
     height: 100vh;
     overflow: hidden;
   }
- 
+
   /* ── Sidebar ── */
   .sidebar {
     width: 270px;
@@ -41,13 +45,13 @@
     overflow: hidden;
     border-right: 1px solid #222244;
   }
- 
+
   .sidebar.closed {
     width: 0;
     min-width: 0;
     opacity: 0;
   }
- 
+
   .sidebar-header {
     padding: 16px 14px 10px;
     display: flex;
@@ -55,7 +59,7 @@
     gap: 10px;
     border-bottom: 1px solid #222244;
   }
- 
+
   .logo-link {
     font-family: 'Bungee', cursive;
     font-size: 1.25rem;
@@ -68,14 +72,14 @@
     flex: 1;
   }
   .logo-link:hover { color: #ffe580; }
- 
+
   .logo-emoji { font-size: 1.3rem; }
- 
+
   .search-wrap {
     padding: 10px 10px 6px;
     position: relative;
   }
- 
+
   .search-wrap input {
     width: 100%;
     padding: 8px 12px 8px 34px;
@@ -98,24 +102,25 @@
     font-size: 0.8rem;
     pointer-events: none;
   }
- 
+
   .game-count {
     padding: 4px 14px 6px;
     font-size: 0.72rem;
     color: var(--muted);
     white-space: nowrap;
   }
- 
+
   .list {
     overflow-y: auto;
     flex: 1;
     padding: 4px 8px 10px;
     scrollbar-width: thin;
     scrollbar-color: #333355 transparent;
+    -webkit-overflow-scrolling: touch;
   }
   .list::-webkit-scrollbar { width: 5px; }
   .list::-webkit-scrollbar-thumb { background: #333355; border-radius: 10px; }
- 
+
   .game-item {
     padding: 9px 12px;
     margin: 3px 0;
@@ -132,7 +137,7 @@
   }
   .game-item:hover { background: var(--card); color: var(--text); }
   .game-item.active { background: var(--card-hover); color: var(--accent); }
- 
+
   /* ── Main ── */
   .main {
     flex: 1;
@@ -140,7 +145,7 @@
     flex-direction: column;
     min-width: 0;
   }
- 
+
   .topbar {
     background: #0f0f22;
     padding: 8px 14px;
@@ -150,7 +155,7 @@
     border-bottom: 1px solid #222244;
     min-height: 48px;
   }
- 
+
   .hamburger {
     background: transparent;
     border: none;
@@ -164,7 +169,7 @@
     flex-shrink: 0;
   }
   .hamburger:hover { background: var(--card); }
- 
+
   .topbar-title {
     flex: 1;
     font-weight: 700;
@@ -174,7 +179,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
- 
+
   .topbar-btn {
     background: var(--card);
     color: var(--text);
@@ -190,7 +195,7 @@
     flex-shrink: 0;
   }
   .topbar-btn:hover { background: var(--card-hover); border-color: var(--accent); color: var(--accent); }
- 
+
   /* ── Homepage ── */
   #homepage {
     flex: 1;
@@ -198,13 +203,14 @@
     padding: 30px 36px 40px;
     scrollbar-width: thin;
     scrollbar-color: #333355 transparent;
+    -webkit-overflow-scrolling: touch;
   }
- 
+
   .home-hero {
     text-align: center;
     margin-bottom: 36px;
   }
- 
+
   .home-hero h1 {
     font-family: 'Bungee', cursive;
     font-size: 2.8rem;
@@ -212,13 +218,13 @@
     text-shadow: 0 0 30px rgba(245,200,66,0.3);
     line-height: 1.1;
   }
- 
+
   .home-hero p {
     color: var(--muted);
     margin-top: 8px;
     font-size: 0.95rem;
   }
- 
+
   .section-label {
     font-family: 'Bungee', cursive;
     font-size: 0.85rem;
@@ -235,14 +241,14 @@
     height: 1px;
     background: linear-gradient(to right, #ff5f7e33, transparent);
   }
- 
+
   .rec-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 14px;
     margin-bottom: 36px;
   }
- 
+
   .rec-card {
     background: var(--card);
     border: 1px solid #252548;
@@ -257,7 +263,7 @@
     border-color: var(--accent);
     background: var(--card-hover);
   }
- 
+
   .rec-card .card-emoji {
     font-size: 2rem;
     display: block;
@@ -278,15 +284,16 @@
     padding: 2px 8px;
     color: var(--muted);
   }
- 
+
   /* ── Game iframe ── */
   #game-container {
     flex: 1;
     display: none;
     position: relative;
+    touch-action: none;
   }
   #game-container.active { display: flex; }
- 
+
   #frame {
     flex: 1;
     border: none;
@@ -294,8 +301,9 @@
     width: 100%;
     height: 100%;
     display: block;
+    touch-action: none;
   }
- 
+
   /* Loading overlay */
   #loading {
     position: absolute;
@@ -311,7 +319,7 @@
     transition: opacity 0.3s;
   }
   #loading.hidden { opacity: 0; }
- 
+
   .spinner {
     width: 44px;
     height: 44px;
@@ -321,7 +329,7 @@
     animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
- 
+
   .loading-text {
     font-family: 'Bungee', cursive;
     color: var(--accent);
@@ -331,7 +339,7 @@
 </style>
 </head>
 <body>
- 
+
 <!-- ── Sidebar ── -->
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
@@ -344,7 +352,7 @@
   <div class="game-count" id="game-count"></div>
   <div class="list" id="list">Loading...</div>
 </div>
- 
+
 <!-- ── Main ── -->
 <div class="main">
   <div class="topbar">
@@ -353,27 +361,27 @@
     <button class="topbar-btn" id="fs-btn" onclick="fullscreenGame()" style="display:none">⛶ Fullscreen</button>
     <button class="topbar-btn" onclick="showHome()">🏠 Home</button>
   </div>
- 
+
   <!-- Homepage -->
   <div id="homepage">
     <div class="home-hero">
       <h1>🎮 Diddy Games</h1>
       <p>Pick a game from the sidebar — or jump into a fan favourite below</p>
     </div>
- 
+
     <div class="section-label">⚡ TOP PICKS</div>
     <div class="rec-grid" id="rec-grid"></div>
- 
+
     <div class="section-label">🏃 RUNNERS & ENDLESS</div>
     <div class="rec-grid" id="rec-runners"></div>
- 
+
     <div class="section-label">🧩 PUZZLE & STRATEGY</div>
     <div class="rec-grid" id="rec-puzzle"></div>
- 
+
     <div class="section-label">🏎 RACING & DRIVING</div>
     <div class="rec-grid" id="rec-racing"></div>
   </div>
- 
+
   <!-- Game container -->
   <div id="game-container">
     <div id="loading">
@@ -382,29 +390,30 @@
     </div>
     <iframe
       id="frame"
-      allow="autoplay; fullscreen; pointer-lock; gamepad; cross-origin-isolated"
+      allow="autoplay; fullscreen; pointer-lock; gamepad; cross-origin-isolated; clipboard-read; clipboard-write"
       allowfullscreen
+      sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
       tabindex="0"
     ></iframe>
   </div>
 </div>
- 
+
 <script>
 let games = [];
 let currentBlobUrl = null;
 let sidebarOpen = true;
- 
-const list       = document.getElementById("list");
-const frame      = document.getElementById("frame");
-const title      = document.getElementById("title");
-const search     = document.getElementById("search");
-const homepage   = document.getElementById("homepage");
+
+const list         = document.getElementById("list");
+const frame        = document.getElementById("frame");
+const title        = document.getElementById("title");
+const search       = document.getElementById("search");
+const homepage     = document.getElementById("homepage");
 const gameContainer = document.getElementById("game-container");
-const loading    = document.getElementById("loading");
-const sidebar    = document.getElementById("sidebar");
-const gameCount  = document.getElementById("game-count");
-const fsBtn      = document.getElementById("fs-btn");
- 
+const loading      = document.getElementById("loading");
+const sidebar      = document.getElementById("sidebar");
+const gameCount    = document.getElementById("game-count");
+const fsBtn        = document.getElementById("fs-btn");
+
 // ── Recommended sections ─────────────────────────────────────────────────────
 const recommended = [
   { name: "Run 3",             emoji: "🏃", tag: "Endless" },
@@ -448,9 +457,10 @@ const racing = [
   { name: "Earn To Die 2",     emoji: "🧟", tag: "Driving" },
   { name: "Snow Rider",        emoji: "🏂", tag: "Racing" },
 ];
- 
+
 function buildRecGrid(containerId, items) {
   const el = document.getElementById(containerId);
+  el.innerHTML = "";
   items.forEach(rec => {
     const div = document.createElement("div");
     div.className = "rec-card";
@@ -459,49 +469,53 @@ function buildRecGrid(containerId, items) {
     el.appendChild(div);
   });
 }
- 
+
 // ── Sidebar toggle ────────────────────────────────────────────────────────────
 function toggleSidebar() {
   sidebarOpen = !sidebarOpen;
   sidebar.classList.toggle("closed", !sidebarOpen);
 }
- 
+
 // ── Show home ─────────────────────────────────────────────────────────────────
 function showHome() {
   homepage.style.display = "block";
   gameContainer.classList.remove("active");
   title.textContent = "🏠 Home";
   fsBtn.style.display = "none";
+  loading.classList.add("hidden");
   document.querySelectorAll(".game-item").forEach(el => el.classList.remove("active"));
+  try { if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl); } catch (e) {}
+  currentBlobUrl = null;
 }
- 
-// ── Load games list ──────────────────────────────────────────────────────────
+
+// ── Load games list ────────────────────────────────────────────────────────────
 async function loadGames() {
   try {
-    const res = await fetch("games.json");
+    const res = await fetch("games.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
     games = await res.json();
     render(games);
-    buildRecGrid("rec-grid",    recommended);
+    buildRecGrid("rec-grid", recommended);
     buildRecGrid("rec-runners", runners);
-    buildRecGrid("rec-puzzle",  puzzle);
-    buildRecGrid("rec-racing",  racing);
- 
-    // Restore last game
+    buildRecGrid("rec-puzzle", puzzle);
+    buildRecGrid("rec-racing", racing);
+
     const saved = localStorage.getItem("lastGame");
     if (saved) {
       const game = games.find(g => g.name === saved);
-      if (game) setTimeout(() => launchGame(game), 400);
+      if (game) setTimeout(() => launchGame(game), 350);
     }
   } catch (e) {
     list.innerHTML = "<div style='padding:12px;color:#ff5f7e;font-size:0.85rem'>Failed to load games.json</div>";
+    gameCount.textContent = "";
   }
 }
- 
+
 // ── Render sidebar list ───────────────────────────────────────────────────────
 function render(data) {
   list.innerHTML = "";
   gameCount.textContent = `${data.length} games`;
- 
+
   data.forEach(game => {
     const div = document.createElement("div");
     div.className = "game-item";
@@ -511,93 +525,126 @@ function render(data) {
     list.appendChild(div);
   });
 }
- 
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function injectBaseTag(html, baseUrl) {
+  if (/<base\s/i.test(html)) return html;
+  return html.replace(/<head[^>]*>/i, match => `${match}<base href="${baseUrl}">`);
+}
+
+async function loadGameInFrame(game) {
+  const url = (game.url || "").trim();
+  if (!url) throw new Error("Missing game.url");
+
+  // Try fetch -> blob first, because many HTML game packs need proper base URLs.
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const contentType = (res.headers.get("content-type") || "").toLowerCase();
+    const looksLikeHtml =
+      contentType.includes("text/html") ||
+      contentType.includes("application/xhtml") ||
+      /\.html?(\?|#|$)/i.test(url) ||
+      contentType.includes("text/plain");
+
+    if (looksLikeHtml) {
+      let html = await res.text();
+      if (!html || html.trim().length < 20) throw new Error("Empty response");
+
+      const baseUrl = url.substring(0, url.lastIndexOf("/") + 1);
+      html = injectBaseTag(html, baseUrl);
+
+      // Keep the game page self-contained inside the iframe
+      const blob = new Blob([html], { type: "text/html; charset=utf-8" });
+      if (currentBlobUrl) {
+        try { URL.revokeObjectURL(currentBlobUrl); } catch (e) {}
+      }
+      currentBlobUrl = URL.createObjectURL(blob);
+      frame.src = currentBlobUrl;
+      return;
+    }
+  } catch (fetchErr) {
+    // Fall through to direct iframe loading.
+  }
+
+  // Fallback: direct iframe load.
+  frame.src = url;
+}
+
 // ── Launch game ───────────────────────────────────────────────────────────────
 async function launchGame(game) {
-  // Update UI
   title.textContent = game.name;
   fsBtn.style.display = "inline-flex";
   homepage.style.display = "none";
   gameContainer.classList.add("active");
   loading.classList.remove("hidden");
- 
+
   document.querySelectorAll(".game-item").forEach(el => {
     el.classList.toggle("active", el.dataset.name === game.name);
   });
- 
+
   localStorage.setItem("lastGame", game.name);
- 
-  // Revoke previous blob URL to avoid memory leak
-  if (currentBlobUrl) {
-    URL.revokeObjectURL(currentBlobUrl);
-    currentBlobUrl = null;
-  }
- 
-  try {
-    const res = await fetch(game.url);
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    let html = await res.text();
- 
-    if (!html || html.trim().length < 50) throw new Error("Empty response");
- 
-    // Inject <base> so any relative sub-resources resolve correctly
-    const baseUrl = game.url.substring(0, game.url.lastIndexOf("/") + 1);
-    if (!html.includes("<base")) {
-      html = html.replace(/(<head[^>]*>)/i, `$1<base href="${baseUrl}">`);
-    }
- 
-    // Use a blob URL — far better input handling than srcdoc
-    const blob = new Blob([html], { type: "text/html; charset=utf-8" });
-    currentBlobUrl = URL.createObjectURL(blob);
-    frame.src = currentBlobUrl;
- 
-    // Hide loading once iframe fires load
-    frame.onload = () => {
-      loading.classList.add("hidden");
-      // Give the iframe window focus so keyboard input works immediately
-      frame.contentWindow?.focus();
-    };
- 
-  } catch (err) {
-    frame.srcdoc = `<body style="background:#111;color:#ff5f7e;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;font-size:1.2rem">⚠️ Could not load game</body>`;
+
+  frame.onload = () => {
     loading.classList.add("hidden");
+    try { frame.contentWindow?.focus(); } catch (e) {}
+  };
+
+  try {
+    await loadGameInFrame(game);
+  } catch (err) {
+    loading.classList.add("hidden");
+    frame.srcdoc = `<body style="background:#111;color:#ff5f7e;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;font-size:1.2rem;margin:0">⚠️ Could not load game</body>`;
   }
 }
- 
+
 // Focus iframe on click so keyboard input always works
 gameContainer.addEventListener("click", () => {
   try { frame.contentWindow?.focus(); } catch(e) {}
 });
- 
+
 // ── Launch by name (for homepage cards) ─────────────────────────────────────
 function launchGameByName(name) {
   const game = games.find(g => g.name === name);
   if (game) {
     launchGame(game);
-    // Scroll the sidebar item into view
     const item = list.querySelector(`[data-name="${CSS.escape(name)}"]`);
     if (item) item.scrollIntoView({ block: "center", behavior: "smooth" });
   }
 }
- 
+
 // ── Fullscreen ───────────────────────────────────────────────────────────────
-function fullscreenGame() {
-  const el = frame;
-  if (el.requestFullscreen)            el.requestFullscreen();
-  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-  else if (el.msRequestFullscreen)     el.msRequestFullscreen();
+async function fullscreenGame() {
+  const el = gameContainer;
+  try {
+    if (el.requestFullscreen) await el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+  } catch (e) {}
 }
- 
+
+// Reduce swipe-down exit on iPad/fullscreen
+document.addEventListener("touchmove", function(e) {
+  if (document.fullscreenElement) e.preventDefault();
+}, { passive: false });
+
+document.addEventListener("gesturestart", function(e) {
+  if (document.fullscreenElement) e.preventDefault();
+}, { passive: false });
+
+document.addEventListener("fullscreenchange", () => {
+  document.body.style.overflow = document.fullscreenElement ? "hidden" : "hidden";
+});
+
 // ── Search ───────────────────────────────────────────────────────────────────
 search.addEventListener("input", () => {
   const term = search.value.toLowerCase();
   render(games.filter(g => g.name.toLowerCase().includes(term)));
 });
- 
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 loadGames();
 </script>
- 
+
 </body>
 </html>
- 

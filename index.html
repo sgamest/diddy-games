@@ -673,16 +673,25 @@ async function launchGame(game) {
  
   /* ── GAME LOADING: UNTOUCHED ── */
   try {
-    const res = await fetch(game.url);
-    const html = await res.text();
-    if (!html || html.trim().length < 50) {
-      frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
-      return;
-    }
-    frame.srcdoc = html;
-  } catch (err) {
-    frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
+  // If it's a normal website (not raw GitHub HTML)
+  if (game.url.startsWith("http") && !game.url.includes("raw.githubusercontent.com")) {
+    frame.src = game.url;
+    return;
   }
+
+  // Otherwise treat it like raw HTML (your original system)
+  const res = await fetch(game.url);
+  const html = await res.text();
+
+  if (!html || html.trim().length < 50) {
+    frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
+    return;
+  }
+
+  frame.srcdoc = html;
+
+} catch (err) {
+  frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
 }
  
 // ── Fullscreen (UNCHANGED) ────────────────────────────────────────────────────

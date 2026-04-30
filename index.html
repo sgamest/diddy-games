@@ -2,63 +2,67 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=0.75">
-<title>Learn Science</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diddy Games</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #07070f;
-    --sidebar:   #0c0c1a;
-    --panel:     #10101f;
-    --lift:      #16162a;
-    --lift2:     #1e1e35;
-    --border:    #1f1f3a;
-    --accent:    #f0c040;
-    --accent2:   #ff4d7d;
-    --text:      #ddddf5;
-    --muted:     #55557a;
-    --font-hd:   'Orbitron', sans-serif;
+    --bg: #07070f;
+    --sidebar: #0c0c1a;
+    --panel: #10101f;
+    --lift: #16162a;
+    --lift2: #1e1e35;
+    --border: #1f1f3a;
+    --accent: #f0c040;
+    --accent2: #ff4d7d;
+    --text: #ddddf5;
+    --muted: #77779a;
+    --font-hd: 'Orbitron', sans-serif;
     --font-body: 'DM Sans', sans-serif;
   }
- 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
+    margin: 0;
     font-family: var(--font-body);
     background: var(--bg);
     color: var(--text);
+    overflow: hidden;
+  }
+
+  .app {
     display: flex;
     height: 100vh;
-    overflow: hidden;
+    width: 100vw;
   }
- 
-  /* ═══ SIDEBAR ═══ */
+
+  /* Sidebar */
   .sidebar {
-    width: 260px;
-    min-width: 260px;
+    width: 280px;
+    min-width: 280px;
     background: var(--sidebar);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--border);
-    transition: width .3s cubic-bezier(.4,0,.2,1), min-width .3s cubic-bezier(.4,0,.2,1), opacity .25s ease;
     overflow: hidden;
+    transition: width .25s ease, min-width .25s ease, opacity .2s ease;
     flex-shrink: 0;
   }
-  .sidebar.closed { width: 0; min-width: 0; opacity: 0; }
- 
+  .sidebar.closed {
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+  }
   .sidebar-logo {
     padding: 15px 16px 13px;
     border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 11px;
     cursor: pointer;
-    transition: opacity .15s;
     user-select: none;
   }
-  .sidebar-logo:hover { opacity: 0.8; }
- 
   .logo-icon-wrap {
     width: 36px; height: 36px;
     background: rgba(240,192,64,.1);
@@ -69,33 +73,30 @@
     animation: glow-pulse 3s ease-in-out infinite;
   }
   .logo-icon-wrap svg { width: 20px; height: 20px; color: var(--accent); }
- 
   @keyframes glow-pulse {
     0%,100% { box-shadow: 0 0 8px rgba(240,192,64,.2); }
-    50%      { box-shadow: 0 0 22px rgba(240,192,64,.5); }
+    50% { box-shadow: 0 0 22px rgba(240,192,64,.5); }
   }
- 
   .logo-text {
     font-family: var(--font-hd);
-    font-size: 0.72rem;
+    font-size: .72rem;
     font-weight: 900;
     letter-spacing: 2px;
     color: var(--accent);
     text-transform: uppercase;
-    text-shadow: 0 0 16px rgba(240,192,64,.4);
+    line-height: 1.1;
     white-space: nowrap;
   }
   .logo-sub {
     display: block;
     font-family: var(--font-body);
-    font-size: 0.57rem;
+    font-size: .57rem;
     color: var(--muted);
     letter-spacing: 1.5px;
     text-transform: uppercase;
     margin-top: 2px;
   }
- 
-  .search-box { padding: 10px 12px 6px; flex-shrink: 0; }
+  .search-box { padding: 10px 12px 6px; }
   .search-inner {
     display: flex; align-items: center;
     background: var(--panel);
@@ -108,38 +109,43 @@
   .search-inner:focus-within { border-color: var(--accent); }
   .search-inner svg { width: 14px; height: 14px; color: var(--muted); flex-shrink: 0; }
   .search-inner input {
-    background: transparent; border: none; outline: none;
+    background: transparent;
+    border: none;
+    outline: none;
     color: var(--text);
     font-family: var(--font-body);
-    font-size: 0.82rem;
+    font-size: .82rem;
     padding: 9px 0;
     width: 100%;
   }
   .search-inner input::placeholder { color: var(--muted); }
- 
-  .count-row { padding: 4px 14px 4px; flex-shrink: 0; }
+  .count-row { padding: 4px 14px 4px; }
   .count-badge {
-    font-size: 0.63rem;
+    font-size: .63rem;
     font-family: var(--font-hd);
     letter-spacing: 1px;
     color: var(--muted);
     text-transform: uppercase;
   }
- 
   .game-list {
-    flex: 1; overflow-y: auto;
+    flex: 1;
+    overflow-y: auto;
     padding: 4px 8px 12px;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
   .game-list::-webkit-scrollbar { width: 4px; }
   .game-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
- 
   .game {
-    padding: 9px 12px; margin: 2px 0;
-    border-radius: 7px; cursor: pointer;
-    font-size: 0.82rem; font-weight: 500;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 9px 12px;
+    margin: 2px 0;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: .82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #9090b8;
     border: 1px solid transparent;
     transition: background .12s, color .12s, border-color .12s;
@@ -149,99 +155,136 @@
     content: '';
     position: absolute;
     left: 0; top: 20%; bottom: 20%;
-    width: 2px; background: var(--accent); border-radius: 2px;
-    opacity: 0; transition: opacity .15s;
+    width: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity .15s;
   }
   .game:hover { background: var(--lift); color: var(--text); border-color: var(--border); }
-  .game:hover::before { opacity: 0.5; }
+  .game:hover::before { opacity: .5; }
   .game.active { background: var(--lift2); color: var(--accent); border-color: rgba(240,192,64,.25); font-weight: 600; }
   .game.active::before { opacity: 1; }
- 
-  /* ═══ MAIN ═══ */
-  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg); }
- 
+
+  /* Main */
+  .main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+
   .topbar {
     background: var(--panel);
     border-bottom: 1px solid var(--border);
-    padding: 0 16px; height: 52px;
-    display: flex; align-items: center; gap: 12px;
-    flex-shrink: 0; position: relative;
+    padding: 0 16px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 30;
   }
   .topbar::after {
     content: '';
-    position: absolute; bottom: 0; left: 0;
+    position: absolute;
+    bottom: 0; left: 0;
     width: 100%; height: 1px;
     background: linear-gradient(90deg, var(--accent) 0%, transparent 60%);
     opacity: .28;
+    pointer-events: none;
   }
- 
-  .hamburger {
-    background: var(--lift);
+  .hamburger, .topbar-btn {
     border: 1px solid var(--border);
+    background: var(--lift);
     color: var(--text);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background .12s, border-color .12s, color .12s, transform .12s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hamburger {
     width: 34px; height: 34px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 7px; cursor: pointer; flex-shrink: 0;
-    transition: background .15s, border-color .15s, color .15s;
+    flex-shrink: 0;
     padding: 0;
   }
-  .hamburger svg { width: 18px; height: 18px; }
-  .hamburger:hover { background: var(--lift2); border-color: var(--accent); color: var(--accent); }
- 
+  .hamburger svg, .topbar-btn svg { width: 18px; height: 18px; }
+  .hamburger:hover, .topbar-btn:hover { background: var(--lift2); border-color: var(--accent); color: var(--accent); }
   .topbar-title {
     flex: 1;
+    min-width: 0;
     font-family: var(--font-hd);
-    font-size: 0.7rem; font-weight: 700;
-    letter-spacing: 2px; color: var(--accent);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
     text-transform: uppercase;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-shadow: 0 0 12px rgba(240,192,64,.35);
   }
- 
-  .topbar-btn {
-    background: var(--lift); color: var(--text);
-    border: 1px solid var(--border);
-    padding: 6px 13px; cursor: pointer;
-    border-radius: 7px;
-    font-family: var(--font-body); font-size: 0.78rem; font-weight: 600;
-    display: flex; align-items: center; gap: 5px;
-    transition: background .12s, border-color .12s, color .12s;
-    white-space: nowrap; flex-shrink: 0;
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
   }
-  .topbar-btn svg { width: 14px; height: 14px; }
-  .topbar-btn:hover { background: var(--lift2); border-color: var(--accent); color: var(--accent); }
+  .topbar-btn {
+    padding: 6px 13px;
+    font-family: var(--font-body);
+    font-size: .78rem;
+    font-weight: 600;
+    gap: 5px;
+    white-space: nowrap;
+  }
   .topbar-btn.primary {
     background: rgba(240,192,64,.1);
     border-color: rgba(240,192,64,.35);
     color: var(--accent);
   }
   .topbar-btn.primary:hover { background: rgba(240,192,64,.2); }
- 
-  /* ═══ HOMEPAGE ═══ */
+
+  /* Content */
+  .content {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .view {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+    display: none;
+  }
+  .view.active { display: block; }
   #homepage {
-    flex: 1; overflow-y: auto;
     padding: 36px 44px 60px;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
-    display: none;
   }
-  #homepage.active { display: block; }
- 
   .hero {
-    text-align: center; margin-bottom: 44px;
-    position: relative; padding: 10px 0;
+    text-align: center;
+    margin-bottom: 44px;
+    position: relative;
+    padding: 10px 0;
   }
   .hero-glow {
-    position: absolute; top: 50%; left: 50%;
+    position: absolute;
+    top: 50%; left: 50%;
     transform: translate(-50%, -60%);
     width: 500px; height: 220px;
     background: radial-gradient(ellipse, rgba(240,192,64,.1) 0%, transparent 70%);
     pointer-events: none;
   }
-  .hero-logo {
-    display: flex; align-items: center;
-    justify-content: center; gap: 18px; margin-bottom: 12px;
-  }
+  .hero-logo { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 12px; }
   .hero-logo-icon {
     width: 60px; height: 60px;
     background: rgba(240,192,64,.08);
@@ -251,47 +294,65 @@
     animation: glow-pulse 3s ease-in-out infinite;
   }
   .hero-logo-icon svg { width: 34px; height: 34px; color: var(--accent); }
- 
   .hero h1 {
     font-family: var(--font-hd);
-    font-size: 2.6rem; font-weight: 900;
-    color: var(--accent); letter-spacing: 4px; text-transform: uppercase;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
     text-shadow: 0 0 40px rgba(240,192,64,.4), 0 0 80px rgba(240,192,64,.12);
     line-height: 1;
+    margin: 0;
   }
-  .hero p { color: var(--muted); font-size: 0.88rem; margin-top: 10px; }
+  .hero p { color: var(--muted); font-size: .88rem; margin-top: 10px; }
   .hero-ver {
-    display: inline-block; margin-top: 8px;
-    font-family: var(--font-hd); font-size: 0.55rem;
-    letter-spacing: 2px; color: var(--muted);
-    background: var(--lift); border: 1px solid var(--border);
-    border-radius: 20px; padding: 3px 10px;
+    display: inline-block;
+    margin-top: 8px;
+    font-family: var(--font-hd);
+    font-size: .55rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    background: var(--lift);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
   }
- 
   .section-title {
-    font-family: var(--font-hd); font-size: 0.62rem;
-    letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent2); margin-bottom: 14px;
-    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-hd);
+    font-size: .62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .section-title::after {
-    content: ''; flex: 1; height: 1px;
+    content: '';
+    flex: 1;
+    height: 1px;
     background: linear-gradient(90deg, rgba(255,77,125,.3), transparent);
   }
- 
-  /* featured card */
   .featured-card {
     background: linear-gradient(135deg, #1a0a20 0%, #12122a 60%, #0e1a20 100%);
     border: 1px solid rgba(255,77,125,.3);
-    border-radius: 14px; padding: 22px 26px;
-    display: flex; align-items: center; gap: 22px;
+    border-radius: 14px;
+    padding: 22px 26px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
     cursor: pointer;
     transition: transform .2s, border-color .2s, box-shadow .2s;
-    margin-bottom: 36px; position: relative; overflow: hidden;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
   }
   .featured-card::before {
     content: '';
-    position: absolute; top: -50px; right: -50px;
+    position: absolute;
+    top: -50px; right: -50px;
     width: 220px; height: 220px;
     background: radial-gradient(circle, rgba(255,77,125,.09) 0%, transparent 70%);
     pointer-events: none;
@@ -305,292 +366,360 @@
   .featured-info { flex: 1; min-width: 0; }
   .featured-badge {
     display: inline-block;
-    background: rgba(255,77,125,.12); border: 1px solid rgba(255,77,125,.35);
-    border-radius: 20px; padding: 2px 10px;
-    font-size: 0.6rem; font-family: var(--font-hd);
-    letter-spacing: 2px; color: var(--accent2); text-transform: uppercase;
+    background: rgba(255,77,125,.12);
+    border: 1px solid rgba(255,77,125,.35);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: .6rem;
+    font-family: var(--font-hd);
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
     margin-bottom: 6px;
   }
   .featured-name {
-    font-family: var(--font-hd); font-size: 1.3rem; font-weight: 900;
-    color: var(--text); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;
+    font-family: var(--font-hd);
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
   }
-  .featured-desc { font-size: 0.81rem; color: var(--muted); line-height: 1.5; }
+  .featured-desc { font-size: .81rem; color: var(--muted); line-height: 1.5; }
   .featured-play {
-    background: rgba(255,77,125,.12); border: 1px solid rgba(255,77,125,.45);
-    color: var(--accent2); padding: 10px 18px; border-radius: 8px;
-    font-family: var(--font-body); font-size: 0.82rem; font-weight: 700;
-    cursor: pointer; transition: background .15s, transform .12s;
-    flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+    background: rgba(255,77,125,.12);
+    border: 1px solid rgba(255,77,125,.45);
+    color: var(--accent2);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: .82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, transform .12s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .featured-play svg { width: 14px; height: 14px; }
   .featured-play:hover { background: rgba(255,77,125,.25); transform: scale(1.04); }
- 
-  /* rec grid */
   .rec-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-    gap: 11px; margin-bottom: 34px;
+    gap: 11px;
+    margin-bottom: 34px;
   }
   .rec-card {
-    background: var(--lift); border: 1px solid var(--border);
-    border-radius: 10px; padding: 15px 10px 11px;
-    cursor: pointer; text-align: center;
+    background: var(--lift);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 15px 10px 11px;
+    cursor: pointer;
+    text-align: center;
     transition: transform .15s, border-color .15s, background .15s;
   }
-  .rec-card:hover { transform: translateY(-4px); border-color: rgba(240,192,64,.4); background: var(--lift2); }
-  .rec-card.missing { opacity: 0.28; pointer-events: none; }
-  .card-emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
-  .card-name { font-size: 0.75rem; font-weight: 600; color: var(--text); line-height: 1.3; }
-  .card-tag {
-    display: inline-block; margin-top: 5px;
-    font-size: 0.58rem;
-    background: rgba(240,192,64,.07); border: 1px solid rgba(240,192,64,.14);
-    border-radius: 20px; padding: 2px 7px;
-    color: var(--muted); font-family: var(--font-hd); letter-spacing: 1px;
+  .rec-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240,192,64,.4);
+    background: var(--lift2);
   }
- 
-  /* ═══ GAME VIEW ═══ */
-  #game-view { flex: 1; display: none; }
-  #game-view.active { display: flex; flex-direction: column; }
- 
-  iframe { flex: 1; border: none; background: white; display: block; width: 100%; }
+  .rec-card.missing { opacity: .28; pointer-events: none; }
+  .card-emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+  .card-name { font-size: .75rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .card-tag {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: .58rem;
+    background: rgba(240,192,64,.07);
+    border: 1px solid rgba(240,192,64,.14);
+    border-radius: 20px;
+    padding: 2px 7px;
+    color: var(--muted);
+    font-family: var(--font-hd);
+    letter-spacing: 1px;
+  }
+
+  #game-view {
+    width: 100%;
+    height: 100%;
+    background: #0b0b14;
+  }
+  #game-view:not(.active) { display: none; }
+  #game-view.active { display: block; }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+    display: block;
+  }
+
+  .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #fff;
+    text-align: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+  .empty-card {
+    max-width: 520px;
+    background: #16162a;
+    border: 1px solid #2a2a44;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  }
+  .empty-card h2 { margin: 0 0 10px; font-size: 22px; }
+  .empty-card p { margin: 0; line-height: 1.5; color: #cfcfe8; }
+  .empty-card button {
+    margin-top: 14px;
+    padding: 10px 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background: #1e1e35;
+    color: #fff;
+    cursor: pointer;
+    font: 600 14px sans-serif;
+  }
 </style>
 </head>
 <body>
- 
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-logo" onclick="showHome()">
-    <div class="logo-icon-wrap">
-      <!-- Ionicons game-controller-outline SVG (MIT) -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
-        <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
-        <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
-        <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
-        <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
-        <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
-        <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div>
-      <div class="logo-text">Diddy Games<span class="logo-sub">v1.2.5 · arcade portal</span></div>
-    </div>
-  </div>
- 
-  <div class="search-box">
-    <div class="search-inner">
-      <!-- search icon -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="48" stroke-linecap="round">
-        <path d="M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64Z"/>
-        <path d="M338.29 338.29 448 448"/>
-      </svg>
-      <input id="search" placeholder="Search games…" autocomplete="off" spellcheck="false">
-    </div>
-  </div>
- 
-  <div class="count-row">
-    <span class="count-badge" id="game-count">Loading…</span>
-  </div>
-  <div class="game-list" id="list">
-    <div style="padding:12px;color:var(--muted);font-size:0.8rem">Loading games…</div>
-  </div>
-</div>
- 
-<!-- MAIN -->
-<div class="main">
-  <div class="topbar">
-    <!-- hamburger with controller icon -->
-    <button class="hamburger" onclick="toggleSidebar()" title="Toggle sidebar">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
-        <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
-        <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
-        <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
-        <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
-        <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
-        <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
- 
-    <span class="topbar-title" id="title">🏠 Home</span>
- 
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="topbar-btn" onclick="showHome()">
-        <!-- home icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M80 212v236a16 16 0 0 0 16 16h96V328a24 24 0 0 1 24-24h80a24 24 0 0 1 24 24v136h96a16 16 0 0 0 16-16V212"/>
-          <path d="M480 256L266.89 52c-5-5.28-16.69-5.34-21.78 0L32 256m368-77V64h-48v69"/>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo" onclick="showHome()">
+      <div class="logo-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
+          <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
+          <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
+          <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
+          <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
+          <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
+          <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Home
-      </button>
-      <button class="topbar-btn primary" onclick="fullscreenGame()" id="fs-btn" style="display:none">
-        <!-- expand icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M432 320v112H320m-128 0H80V320M80 192V80h112m128 0h112v112"/>
+      </div>
+      <div>
+        <div class="logo-text">Diddy Games<span class="logo-sub">arcade portal</span></div>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <div class="search-inner">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="48" stroke-linecap="round">
+          <path d="M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64Z"/>
+          <path d="M338.29 338.29 448 448"/>
         </svg>
-        Fullscreen
-      </button>
-    </div>
-  </div>
- 
-  <!-- HOMEPAGE -->
-  <div id="homepage" class="active">
-    <div class="hero">
-      <div class="hero-glow"></div>
-      <div class="hero-logo">
-        <div class="hero-logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
-            <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
-            <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
-            <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
-            <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
-            <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
-            <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h1>Diddy Games</h1>
-        <div class="hero-logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
-            <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
-            <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
-            <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
-            <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
-            <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
-            <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <input id="search" placeholder="Search games…" autocomplete="off" spellcheck="false">
       </div>
-      <p>Pick from the sidebar — or jump into a favourite below</p>
-      <span class="hero-ver">v1.2.5</span>
     </div>
- 
-    <div class="section-title">⭐ Featured Game</div>
-    <div class="featured-card" onclick="launchByKeyword('bitlife')">
-      <span class="featured-emoji">🎰</span>
-      <div class="featured-info">
-        <span class="featured-badge">Editor's Pick</span>
-        <div class="featured-name">BitLife</div>
-        <div class="featured-desc">Live an entire life in this addictive text-based simulator. Make choices, build a career, find love — or go to prison. Every run is different.</div>
-      </div>
-      <button class="featured-play">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M133 440a35.37 35.37 0 0 1-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37 7.46-27.53 19.46-34.33a35.13 35.13 0 0 1 35.77.45l247.85 148.36a36 36 0 0 1 0 61.11L151.23 435a35.5 35.5 0 0 1-18.23 5Z"/></svg>
-        Play Now
+
+    <div class="count-row">
+      <span class="count-badge" id="game-count">Loading…</span>
+    </div>
+
+    <div class="game-list" id="list">
+      <div style="padding:12px;color:var(--muted);font-size:0.8rem">Loading games…</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
+          <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
+          <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
+          <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
+          <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
+          <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
+          <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
-    </div>
- 
-    <div class="section-title">⚡ Top Picks</div>
-    <div class="rec-grid" id="rec-top"></div>
- 
-    <div class="section-title">🏃 Runners &amp; Endless</div>
-    <div class="rec-grid" id="rec-runners"></div>
- 
-    <div class="section-title">🧩 Puzzle &amp; Strategy</div>
-    <div class="rec-grid" id="rec-puzzle"></div>
- 
-    <div class="section-title">🏎 Racing &amp; Driving</div>
-    <div class="rec-grid" id="rec-racing"></div>
-  </div>
- 
-  <!-- GAME VIEW -->
-  <div id="game-view">
-    <iframe id="frame"></iframe>
-  </div>
+
+      <span class="topbar-title" id="title">🏠 Home</span>
+
+      <div class="topbar-actions">
+        <button class="topbar-btn" onclick="showHome()" id="home-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M80 212v236a16 16 0 0 0 16 16h96V328a24 24 0 0 1 24-24h80a24 24 0 0 1 24 24v136h96a16 16 0 0 0 16-16V212"/>
+            <path d="M480 256L266.89 52c-5-5.28-16.69-5.34-21.78 0L32 256m368-77V64h-48v69"/>
+          </svg>
+          Home
+        </button>
+        <button class="topbar-btn primary" onclick="fullscreenGame()" id="fs-btn" style="display:none">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M432 320v112H320m-128 0H80V320M80 192V80h112m128 0h112v112"/>
+          </svg>
+          Fullscreen
+        </button>
+      </div>
+    </header>
+
+    <section class="content">
+      <div id="homepage" class="view active">
+        <div class="hero">
+          <div class="hero-glow"></div>
+          <div class="hero-logo">
+            <div class="hero-logo-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
+                <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
+                <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
+                <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
+                <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
+                <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
+                <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h1>Diddy Games</h1>
+            <div class="hero-logo-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32" stroke-miterlimit="10">
+                <path d="M467.51 248.83c-18.4-83.18-45.69-136.24-89.43-149.17A91.5 91.5 0 0 0 352 96c-26.89 0-48.11 16-96 16s-69.15-16-96-16a99.09 99.09 0 0 0-27.2 3.66C89 112.59 61.94 165.7 43.33 248.83c-19 84.91-15.56 152 21.58 164.88c26 9 49.25-9.61 71.27-37c25-31.2 55.79-40.8 119.82-40.8s93.62 9.6 118.66 40.8c22 27.41 46.11 45.79 71.42 37.16c41.02-14.01 40.44-79.13 21.43-165.04Z"/>
+                <circle cx="292" cy="224" r="20" fill="currentColor" stroke="none"/>
+                <circle cx="336" cy="180" r="20" fill="currentColor" stroke="none"/>
+                <circle cx="380" cy="224" r="20" fill="currentColor" stroke="none"/>
+                <path d="M336 288a20 20 0 1 1 20-19.95A20 20 0 0 1 336 288Z" fill="currentColor" stroke="none"/>
+                <path d="M160 176v96m48-48h-96" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <p>Pick from the sidebar — or jump into a favourite below</p>
+          <span class="hero-ver">v1.0</span>
+        </div>
+
+        <div class="section-title">⭐ Featured Game</div>
+        <div class="featured-card" onclick="launchByKeyword('bitlife')">
+          <span class="featured-emoji">🎰</span>
+          <div class="featured-info">
+            <span class="featured-badge">Editor's Pick</span>
+            <div class="featured-name">BitLife</div>
+            <div class="featured-desc">Live an entire life in this text-based simulator. Make choices, build a career, and see where the story goes.</div>
+          </div>
+          <button class="featured-play">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M133 440a35.37 35.37 0 0 1-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37 7.46-27.53 19.46-34.33a35.13 35.13 0 0 1 35.77.45l247.85 148.36a36 36 0 0 1 0 61.11L151.23 435a35.5 35.5 0 0 1-18.23 5Z"/></svg>
+            Play Now
+          </button>
+        </div>
+
+        <div class="section-title">⚡ Top Picks</div>
+        <div class="rec-grid" id="rec-top"></div>
+
+        <div class="section-title">🏃 Runners &amp; Endless</div>
+        <div class="rec-grid" id="rec-runners"></div>
+
+        <div class="section-title">🧩 Puzzle &amp; Strategy</div>
+        <div class="rec-grid" id="rec-puzzle"></div>
+
+        <div class="section-title">🏎 Racing &amp; Driving</div>
+        <div class="rec-grid" id="rec-racing"></div>
+      </div>
+
+      <div id="game-view" class="view">
+        <iframe id="frame" title="Game frame"></iframe>
+      </div>
+    </section>
+  </main>
 </div>
- 
+
 <script>
 let games = [];
 let sidebarOpen = true;
- 
-const listEl      = document.getElementById("list");
-const frame       = document.getElementById("frame");
-const titleEl     = document.getElementById("title");
-const searchEl    = document.getElementById("search");
-const gameCountEl = document.getElementById("game-count");
-const sidebarEl   = document.getElementById("sidebar");
-const homepage    = document.getElementById("homepage");
-const gameView    = document.getElementById("game-view");
-const fsBtn       = document.getElementById("fs-btn");
- 
-// ── Recommended data ──────────────────────────────────────────────────────────
+let currentGame = null;
+
+const listEl = document.getElementById('list');
+const frame = document.getElementById('frame');
+const titleEl = document.getElementById('title');
+const searchEl = document.getElementById('search');
+const gameCountEl = document.getElementById('game-count');
+const sidebarEl = document.getElementById('sidebar');
+const homepage = document.getElementById('homepage');
+const gameView = document.getElementById('game-view');
+const fsBtn = document.getElementById('fs-btn');
+
 const recData = {
-  "rec-top": [
-    { kw:"slope",                 emoji:"🔴", tag:"SKILL"     },
-    { kw:"geometry dash",         emoji:"📐", tag:"RHYTHM"    },
-    { kw:"among us",              emoji:"🚀", tag:"SOCIAL"    },
-    { kw:"minecraft 1.12",        emoji:"⛏️",  tag:"SANDBOX"   },
-    { kw:"happy wheels",          emoji:"🚲", tag:"PHYSICS"   },
-    { kw:"bloons td 5",           emoji:"🎈", tag:"TOWER DEF" },
-    { kw:"cookie clicker",        emoji:"🍪", tag:"IDLE"      },
-    { kw:"plants vs",             emoji:"🌻", tag:"STRATEGY"  },
-    { kw:"retro bowl",            emoji:"🏈", tag:"SPORTS"    },
-    { kw:"pac",                   emoji:"👻", tag:"ARCADE"    },
-    { kw:"fireboy and watergirl", emoji:"🔥", tag:"CO-OP"     },
-    { kw:"stickman hook",         emoji:"🕷️", tag:"PHYSICS"   },
-    { kw:"idle breakout",         emoji:"💥", tag:"IDLE"      },
-    { kw:"fnaf",                  emoji:"🐻", tag:"HORROR"    },
-    { kw:"duck life",             emoji:"🦆", tag:"RPG"       },
-    { kw:"tiny fishing",          emoji:"🎣", tag:"CHILL"     },
+  'rec-top': [
+    { kw:'slope', emoji:'🔴', tag:'SKILL' },
+    { kw:'geometry dash', emoji:'📐', tag:'RHYTHM' },
+    { kw:'among us', emoji:'🚀', tag:'SOCIAL' },
+    { kw:'minecraft 1.12', emoji:'⛏️', tag:'SANDBOX' },
+    { kw:'happy wheels', emoji:'🚲', tag:'PHYSICS' },
+    { kw:'bloons td 5', emoji:'🎈', tag:'TOWER DEF' },
+    { kw:'cookie clicker', emoji:'🍪', tag:'IDLE' },
+    { kw:'plants vs', emoji:'🌻', tag:'STRATEGY' }
   ],
-  "rec-runners": [
-    { kw:"run 3",                 emoji:"🏃", tag:"ENDLESS"   },
-    { kw:"temple run 2",          emoji:"🏛️", tag:"RUNNER"    },
-    { kw:"subway surfers beijing",emoji:"🚇", tag:"RUNNER"    },
-    { kw:"doodle jump",           emoji:"🐸", tag:"JUMPER"    },
-    { kw:"flappy bird",           emoji:"🐦", tag:"ARCADE"    },
-    { kw:"jetpack joyride",       emoji:"🚀", tag:"RUNNER"    },
-    { kw:"tunnel rush",           emoji:"🕳️", tag:"ENDLESS"   },
-    { kw:"helix jump",            emoji:"🌀", tag:"SKILL"     },
-    { kw:"ovo",                   emoji:"🥚", tag:"PLATFORM"  },
-    { kw:"vex 5",                 emoji:"🏅", tag:"PLATFORM"  },
-    { kw:"geometry vibes",        emoji:"🎵", tag:"RHYTHM"    },
-    { kw:"dreadhead",             emoji:"💨", tag:"PARKOUR"   },
+  'rec-runners': [
+    { kw:'run 3', emoji:'🏃', tag:'ENDLESS' },
+    { kw:'temple run 2', emoji:'🏛️', tag:'RUNNER' },
+    { kw:'subway surfers', emoji:'🚇', tag:'RUNNER' },
+    { kw:'doodle jump', emoji:'🐸', tag:'JUMPER' },
+    { kw:'flappy bird', emoji:'🐦', tag:'ARCADE' },
+    { kw:'jetpack joyride', emoji:'🚀', tag:'RUNNER' },
+    { kw:'tunnel rush', emoji:'🕳️', tag:'ENDLESS' },
+    { kw:'helix jump', emoji:'🌀', tag:'SKILL' }
   ],
-  "rec-puzzle": [
-    { kw:"2048",                  emoji:"🔢", tag:"PUZZLE"    },
-    { kw:"minesweeper",           emoji:"💣", tag:"LOGIC"     },
-    { kw:"chess",                 emoji:"♟️", tag:"STRATEGY"  },
-    { kw:"cut the rope",          emoji:"✂️", tag:"PUZZLE"    },
-    { kw:"impossible quiz",       emoji:"❓", tag:"QUIZ"      },
-    { kw:"wordle",                emoji:"🔤", tag:"WORD"      },
-    { kw:"bloxorz",               emoji:"📦", tag:"PUZZLE"    },
-    { kw:"trap the cat",          emoji:"🐱", tag:"PUZZLE"    },
-    { kw:"sand game",             emoji:"⏳", tag:"SANDBOX"   },
-    { kw:"riddle school",         emoji:"📚", tag:"POINT&CLK" },
+  'rec-puzzle': [
+    { kw:'2048', emoji:'🔢', tag:'PUZZLE' },
+    { kw:'minesweeper', emoji:'💣', tag:'LOGIC' },
+    { kw:'chess', emoji:'♟️', tag:'STRATEGY' },
+    { kw:'cut the rope', emoji:'✂️', tag:'PUZZLE' },
+    { kw:'impossible quiz', emoji:'❓', tag:'QUIZ' },
+    { kw:'wordle', emoji:'🔤', tag:'WORD' },
+    { kw:'bloxorz', emoji:'📦', tag:'PUZZLE' },
+    { kw:'trap the cat', emoji:'🐱', tag:'PUZZLE' }
   ],
-  "rec-racing": [
-    { kw:"moto x3m",              emoji:"🏍️", tag:"STUNT"     },
-    { kw:"drift boss",            emoji:"🚗", tag:"DRIVING"   },
-    { kw:"hill climb",            emoji:"🚙", tag:"PHYSICS"   },
-    { kw:"drive mad",             emoji:"😤", tag:"DRIVING"   },
-    { kw:"madalin stunt",         emoji:"🏎️", tag:"STUNT"     },
-    { kw:"poly track",            emoji:"🛤️", tag:"RACING"    },
-    { kw:"earn to die",           emoji:"🧟", tag:"DRIVING"   },
-    { kw:"snow rider",            emoji:"🏂", tag:"RACING"    },
-    { kw:"eggy car",              emoji:"🥚", tag:"PHYSICS"   },
-    { kw:"death run",             emoji:"💀", tag:"OBSTACLE"  },
-  ],
+  'rec-racing': [
+    { kw:'moto x3m', emoji:'🏍️', tag:'STUNT' },
+    { kw:'drift boss', emoji:'🚗', tag:'DRIVING' },
+    { kw:'hill climb', emoji:'🚙', tag:'PHYSICS' },
+    { kw:'drive mad', emoji:'😤', tag:'DRIVING' },
+    { kw:'madalin stunt', emoji:'🏎️', tag:'STUNT' },
+    { kw:'poly track', emoji:'🛤️', tag:'RACING' },
+    { kw:'earn to die', emoji:'🧟', tag:'DRIVING' },
+    { kw:'snow rider', emoji:'🏂', tag:'RACING' }
+  ]
 };
- 
-// Fuzzy find
-function findGame(kw) {
-  const k = kw.toLowerCase();
+
+function findGame(keyword) {
+  const k = String(keyword || '').toLowerCase().trim();
+  if (!k) return null;
   return games.find(g => g.name.toLowerCase() === k)
-      || games.find(g => g.name.toLowerCase().startsWith(k))
-      || games.find(g => k.split(" ").every(w => g.name.toLowerCase().includes(w)))
-      || games.find(g => g.name.toLowerCase().includes(k))
-      || null;
+    || games.find(g => g.name.toLowerCase().startsWith(k))
+    || games.find(g => k.split(/\s+/).every(w => g.name.toLowerCase().includes(w)))
+    || games.find(g => g.name.toLowerCase().includes(k))
+    || null;
 }
- 
-// Build homepage grids — called AFTER games are loaded
+
+function showHome() {
+  currentGame = null;
+  titleEl.textContent = '🏠 Home';
+  fsBtn.style.display = 'none';
+  homepage.classList.add('active');
+  gameView.classList.remove('active');
+  document.querySelectorAll('.game').forEach(el => el.classList.remove('active'));
+}
+
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  sidebarEl.classList.toggle('closed', !sidebarOpen);
+}
+
+function launchByKeyword(kw) {
+  const game = findGame(kw);
+  if (game) launchGame(game);
+}
+
 function buildHomepage() {
   Object.entries(recData).forEach(([id, items]) => {
     const container = document.getElementById(id);
     if (!container) return;
-    container.innerHTML = "";
+    container.innerHTML = '';
+
     items.forEach(item => {
       const game = findGame(item.kw);
-      const div = document.createElement("div");
-      div.className = "rec-card" + (game ? "" : " missing");
+      const div = document.createElement('div');
+      div.className = 'rec-card' + (game ? '' : ' missing');
       div.innerHTML = `<span class="card-emoji">${item.emoji}</span>
         <div class="card-name">${game ? game.name : item.kw}</div>
         <span class="card-tag">${item.tag}</span>`;
@@ -599,133 +728,14 @@ function buildHomepage() {
     });
   });
 }
- 
-// ── Nav ───────────────────────────────────────────────────────────────────────
-function showHome() {
-  homepage.classList.add("active");
-  gameView.classList.remove("active");
-  titleEl.textContent = "🏠 Home";
-  fsBtn.style.display = "none";
-  document.querySelectorAll(".game").forEach(el => el.classList.remove("active"));
-}
- 
-function toggleSidebar() {
-  sidebarOpen = !sidebarOpen;
-  sidebarEl.classList.toggle("closed", !sidebarOpen);
-}
- 
-function launchByKeyword(kw) {
-  const game = findGame(kw);
-  if (game) launchGame(game);
-}
- 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-function isRawHtmlUrl(url) {
-  if (!url) return false;
-  const u = url.toLowerCase();
-  return (
-    u.includes("raw.githubusercontent.com") ||
-    u.endsWith(".html") ||
-    u.endsWith(".htm")
-  );
-}
 
-function isProbablyEmbeddableUrl(url) {
-  if (!url) return false;
-  const u = url.toLowerCase();
-  return u.startsWith("http://") || u.startsWith("https://");
-}
-
-function showFrameMessage(title, message, buttonUrl = "") {
-  const btn = buttonUrl
-    ? `<button onclick="window.open('${buttonUrl.replace(/'/g, "\\'")}', '_blank')"
-         style="margin-top:14px;padding:10px 16px;border:1px solid #555;border-radius:8px;
-                background:#1e1e35;color:#fff;cursor:pointer;font:600 14px sans-serif;">
-         Open in new tab
-       </button>`
-    : "";
-
-  frame.src = "";
-  frame.srcdoc = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>
-        body {
-          margin: 0;
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #0b0b14;
-          color: #fff;
-          font-family: sans-serif;
-          text-align: center;
-          padding: 24px;
-          box-sizing: border-box;
-        }
-        .card {
-          max-width: 520px;
-          background: #16162a;
-          border: 1px solid #2a2a44;
-          border-radius: 16px;
-          padding: 24px;
-          box-shadow: 0 12px 40px rgba(0,0,0,.35);
-        }
-        h2 { margin: 0 0 10px; font-size: 22px; }
-        p  { margin: 0; line-height: 1.5; color: #cfcfe8; }
-      </style>
-    </head>
-    <body>
-      <div class="card">
-        <h2>${title}</h2>
-        <p>${message}</p>
-        ${btn}
-      </div>
-    </body>
-    </html>
-  `;
-}
-
-// ── Load games.json ───────────────────────────────────────────────────────────
-async function loadGames() {
-  try {
-    const res = await fetch("games.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-
-    const data = await res.json();
-    if (!Array.isArray(data)) throw new Error("games.json must be an array");
-
-    games = data.filter(g => g && typeof g.name === "string" && typeof g.url === "string");
-
-    render(games);
-    buildHomepage();
-    gameCountEl.textContent = games.length + " games";
-
-    const saved = localStorage.getItem("lastGame");
-    if (saved) {
-      const game = games.find(g => g.name === saved);
-      if (game) setTimeout(() => launchGame(game), 250);
-    }
-  } catch (e) {
-    console.error(e);
-    listEl.innerHTML = `<div style="padding:12px;color:#ff4d7d;font-size:0.8rem">
-      Failed to load games.json<br>${e.message}
-    </div>`;
-    gameCountEl.textContent = "0 games";
-  }
-}
-
-// ── Render sidebar ────────────────────────────────────────────────────────────
 function render(data) {
-  listEl.innerHTML = "";
-  gameCountEl.textContent = data.length + " games";
+  listEl.innerHTML = '';
+  gameCountEl.textContent = `${data.length} games`;
 
   data.forEach(game => {
-    const div = document.createElement("div");
-    div.className = "game";
+    const div = document.createElement('div');
+    div.className = 'game';
     div.textContent = game.name;
     div.dataset.name = game.name;
     div.onclick = () => launchGame(game);
@@ -733,99 +743,144 @@ function render(data) {
   });
 }
 
-// ── Launch game ───────────────────────────────────────────────────────────────
-async function launchGame(game) {
-  document.querySelectorAll(".game").forEach(el => el.classList.remove("active"));
+function isRawHtmlUrl(url) {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return u.includes('raw.githubusercontent.com') || u.endsWith('.html') || u.endsWith('.htm');
+}
 
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function openGameFallback(url, title, message) {
+  const safeUrl = String(url).replace(/'/g, "\\'");
+  frame.src = '';
+  frame.srcdoc = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>
+        body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0b0b14;color:#fff;text-align:center;padding:24px;box-sizing:border-box;font-family:sans-serif}
+        .card{max-width:520px;background:#16162a;border:1px solid #2a2a44;border-radius:16px;padding:24px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+        h2{margin:0 0 10px;font-size:22px}
+        p{margin:0;line-height:1.5;color:#cfcfe8}
+        button{margin-top:14px;padding:10px 16px;border:1px solid #555;border-radius:8px;background:#1e1e35;color:#fff;cursor:pointer;font:600 14px sans-serif}
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <h2>${escapeHtml(title)}</h2>
+        <p>${escapeHtml(message)}</p>
+        <button onclick="window.open('${safeUrl}', '_blank')">Open in new tab</button>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+async function loadGames() {
+  try {
+    const res = await fetch('games.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error('games.json must be an array');
+
+    games = data.filter(g => g && typeof g.name === 'string' && typeof g.url === 'string');
+
+    render(games);
+    buildHomepage();
+    gameCountEl.textContent = `${games.length} games`;
+
+    const saved = localStorage.getItem('lastGame');
+    if (saved) {
+      const game = games.find(g => g.name === saved);
+      if (game) setTimeout(() => launchGame(game), 200);
+    }
+  } catch (e) {
+    console.error(e);
+    listEl.innerHTML = `<div style="padding:12px;color:#ff4d7d;font-size:0.8rem">Failed to load games.json<br>${escapeHtml(e.message)}</div>`;
+    gameCountEl.textContent = '0 games';
+  }
+}
+
+async function launchGame(game) {
+  currentGame = game;
+
+  document.querySelectorAll('.game').forEach(el => el.classList.remove('active'));
   const item = listEl.querySelector(`[data-name="${CSS.escape(game.name)}"]`);
   if (item) {
-    item.classList.add("active");
-    item.scrollIntoView({ block: "nearest" });
+    item.classList.add('active');
+    item.scrollIntoView({ block: 'nearest' });
   }
 
-  homepage.classList.remove("active");
-  gameView.classList.add("active");
+  homepage.classList.remove('active');
+  gameView.classList.add('active');
   titleEl.textContent = game.name;
-  fsBtn.style.display = "";
-  localStorage.setItem("lastGame", game.name);
+  fsBtn.style.display = '';
+  localStorage.setItem('lastGame', game.name);
 
   try {
-    const url = game.embed || game.url;
+    const target = game.embed || game.url;
 
-    // Raw HTML files: fetch + srcdoc
-    if (isRawHtmlUrl(url)) {
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-
+    if (isRawHtmlUrl(target)) {
+      const res = await fetch(target, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const html = await res.text();
       if (!html || html.trim().length < 50) {
-        showFrameMessage("Failed to load game", "The HTML file was empty or too small.", url);
+        openGameFallback(target, 'Failed to load game', 'The HTML file was empty or too small.');
         return;
       }
-
-      frame.src = "";
+      frame.src = '';
       frame.srcdoc = html;
       return;
     }
 
-    // Normal websites: iframe src
-    if (isProbablyEmbeddableUrl(url)) {
-      frame.srcdoc = "";
-      frame.src = url;
+    frame.srcdoc = '';
+    frame.src = target;
 
-      // If you want a visible fallback for blocked sites, use a tiny delay and an info page.
-      // True iframe-blocked pages cannot be forced from the browser.
-      setTimeout(() => {
-        try {
-          const doc = frame.contentDocument;
-          if (!doc || !doc.body || !doc.body.children.length) {
-            showFrameMessage(
-              "This site may block embedding",
-              "Some websites refuse to load inside iframes. Try opening it in a new tab.",
-              url
-            );
-          }
-        } catch {
-          showFrameMessage(
-            "This site may block embedding",
-            "Some websites refuse to load inside iframes. Try opening it in a new tab.",
-            url
-          );
+    setTimeout(() => {
+      try {
+        const doc = frame.contentDocument;
+        if (!doc || !doc.body || !doc.body.children.length) {
+          openGameFallback(target, 'This site may block embedding', 'Some websites refuse to load inside iframes.');
         }
-      }, 1800);
-
-      return;
-    }
-
-    // Fallback for unusual URLs
-    showFrameMessage("Unsupported link", "This link format is not supported.", url);
+      } catch {
+        openGameFallback(target, 'This site may block embedding', 'Some websites refuse to load inside iframes.');
+      }
+    }, 1700);
   } catch (err) {
     console.error(err);
-    showFrameMessage("Error loading game", "The game could not be loaded.", game.url);
+    openGameFallback(game.url, 'Error loading game', 'The game could not be loaded.');
   }
 }
 
-// ── Fullscreen ────────────────────────────────────────────────────────────────
 function fullscreenGame() {
-  const hasContent = !!frame.src || !!frame.srcdoc;
-  if (!hasContent) {
-    alert("Load a game first");
+  if (!currentGame) {
+    alert('Load a game first');
     return;
   }
 
-  if (frame.requestFullscreen) frame.requestFullscreen();
-  else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
-  else if (frame.msRequestFullscreen) frame.msRequestFullscreen();
+  const el = document.getElementById('game-view').classList.contains('active') ? frame : document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if (el.msRequestFullscreen) el.msRequestFullscreen();
 }
 
-// ── Search ────────────────────────────────────────────────────────────────────
-searchEl.addEventListener("input", () => {
+searchEl.addEventListener('input', () => {
   const term = searchEl.value.toLowerCase().trim();
   render(games.filter(g => g.name.toLowerCase().includes(term)));
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-loadGames();</script>
+loadGames();
+</script>
 </body>
 </html>
- 

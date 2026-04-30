@@ -667,53 +667,48 @@ function render(data) {
 
 // ── Launch game (FIXED + SMART LOADING) ───────────────────────────────────────
 async function launchGame(game) {
-  // highlight
   document.querySelectorAll(".game").forEach(el => el.classList.remove("active"));
+
   const item = listEl.querySelector(`[data-name="${game.name}"]`);
   if (item) {
     item.classList.add("active");
     item.scrollIntoView({ block: "nearest" });
   }
 
-  // UI
   homepage.classList.remove("active");
   gameView.classList.add("active");
   titleEl.textContent = game.name;
   fsBtn.style.display = "";
-
   localStorage.setItem("lastGame", game.name);
 
   try {
-    // 🔹 CASE 1: Raw GitHub or HTML file → fetch + srcdoc
-    if (
-      game.url.includes("raw.githubusercontent.com") ||
-      game.url.endsWith(".html")
-    ) {
-      const res = await fetch(game.url);
-      const html = await res.text();
 
-      if (!html || html.trim().length < 50) {
-        frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
-        return;
-      }
-
-      frame.src = "";
-      frame.srcdoc = html;
+    // 🌐 TYPE 1: normal website (iframe)
+    if (game.type === "site") {
+      frame.srcdoc = "";
+      frame.src = game.url;
       return;
     }
 
-    // 🔹 CASE 2: Normal website → iframe
-    frame.srcdoc = "";
-    frame.src = game.url;
+    // 📄 TYPE 2: raw HTML game (GitHub etc.)
+    const res = await fetch(game.url);
+    const html = await res.text();
+
+    if (!html || html.trim().length < 50) {
+      frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
+      return;
+    }
+
+    frame.src = "";
+    frame.srcdoc = html;
 
   } catch (err) {
     console.error(err);
     frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
   }
 }
-
-
-// ── Fullscreen ────────────────────────────────────────────────────────────────
+  
+  // ── Fullscreen ────────────────────────────────────────────────────────────────
 function fullscreenGame() {
   if (!frame.src && !frame.srcdoc) {
     alert("Load a game first");

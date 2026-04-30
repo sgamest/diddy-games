@@ -788,7 +788,15 @@ function openGameFallback(url, title, message) {
 
 
   //load games
- games = data
+ async function loadGames() {
+  try {
+    const res = await fetch('./games.json', { cache: 'no-store' });
+    let data = await res.json();
+
+    if (!Array.isArray(data)) throw new Error("games.json must be an array");
+
+    // ✅ sort alphabetically
+    games = data
       .filter(g => g && g.name && g.url)
       .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -813,7 +821,6 @@ function openGameFallback(url, title, message) {
     gameCountEl.textContent = '0 games';
   }
 }
-
   //launch games
 async function launchGame(game) {
   currentGame = game;

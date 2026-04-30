@@ -619,35 +619,104 @@ function launchByKeyword(kw) {
   if (game) launchGame(game);
 }
  
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function isRawHtmlUrl(url) {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return (
+    u.includes("raw.githubusercontent.com") ||
+    u.endsWith(".html") ||
+    u.endsWith(".htm")
+  );
+}
+
+function isProbablyEmbeddableUrl(url) {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return u.startsWith("http://") || u.startsWith("https://");
+}
+
+function showFrameMessage(title, message, buttonUrl = "") {
+  const btn = buttonUrl
+    ? `<button onclick="window.open('${buttonUrl.replace(/'/g, "\\'")}', '_blank')"
+         style="margin-top:14px;padding:10px 16px;border:1px solid #555;border-radius:8px;
+                background:#1e1e35;color:#fff;cursor:pointer;font:600 14px sans-serif;">
+         Open in new tab
+       </button>`
+    : "";
+
+  frame.src = "";
+  frame.srcdoc = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>
+        body {
+          margin: 0;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #0b0b14;
+          color: #fff;
+          font-family: sans-serif;
+          text-align: center;
+          padding: 24px;
+          box-sizing: border-box;
+        }
+        .card {
+          max-width: 520px;
+          background: #16162a;
+          border: 1px solid #2a2a44;
+          border-radius: 16px;
+          padding: 24px;
+          box-shadow: 0 12px 40px rgba(0,0,0,.35);
+        }
+        h2 { margin: 0 0 10px; font-size: 22px; }
+        p  { margin: 0; line-height: 1.5; color: #cfcfe8; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <h2>${title}</h2>
+        <p>${message}</p>
+        ${btn}
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 // ── Load games.json ───────────────────────────────────────────────────────────
 async function loadGames() {
   try {
-    const res = await fetch("games.json");
-
+    const res = await fetch("games.json", { cache: "no-store" });
     if (!res.ok) throw new Error("HTTP " + res.status);
 
-    games = await res.json();
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error("games.json must be an array");
+
+    games = data.filter(g => g && typeof g.name === "string" && typeof g.url === "string");
 
     render(games);
     buildHomepage();
-
     gameCountEl.textContent = games.length + " games";
 
-    // restore last played
     const saved = localStorage.getItem("lastGame");
     if (saved) {
       const game = games.find(g => g.name === saved);
-      if (game) setTimeout(() => launchGame(game), 300);
+      if (game) setTimeout(() => launchGame(game), 250);
     }
-
   } catch (e) {
     console.error(e);
     listEl.innerHTML = `<div style="padding:12px;color:#ff4d7d;font-size:0.8rem">
       Failed to load games.json<br>${e.message}
     </div>`;
+    gameCountEl.textContent = "0 games";
   }
 }
-
 
 // ── Render sidebar ────────────────────────────────────────────────────────────
 function render(data) {
@@ -664,12 +733,11 @@ function render(data) {
   });
 }
 
-
-// ── Launch game (FIXED + SMART LOADING) ───────────────────────────────────────
+// ── Launch game ───────────────────────────────────────────────────────────────
 async function launchGame(game) {
   document.querySelectorAll(".game").forEach(el => el.classList.remove("active"));
 
-  const item = listEl.querySelector(`[data-name="${game.name}"]`);
+  const item = listEl.querySelector(`[data-name="${CSS.escape(game.name)}"]`);
   if (item) {
     item.classList.add("active");
     item.scrollIntoView({ block: "nearest" });
@@ -682,35 +750,65 @@ async function launchGame(game) {
   localStorage.setItem("lastGame", game.name);
 
   try {
+    const url = game.embed || game.url;
 
-    // 🌐 TYPE 1: normal website (iframe)
-    if (game.type === "site") {
+    // Raw HTML files: fetch + srcdoc
+    if (isRawHtmlUrl(url)) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+
+      const html = await res.text();
+      if (!html || html.trim().length < 50) {
+        showFrameMessage("Failed to load game", "The HTML file was empty or too small.", url);
+        return;
+      }
+
+      frame.src = "";
+      frame.srcdoc = html;
+      return;
+    }
+
+    // Normal websites: iframe src
+    if (isProbablyEmbeddableUrl(url)) {
       frame.srcdoc = "";
-      frame.src = game.url;
+      frame.src = url;
+
+      // If you want a visible fallback for blocked sites, use a tiny delay and an info page.
+      // True iframe-blocked pages cannot be forced from the browser.
+      setTimeout(() => {
+        try {
+          const doc = frame.contentDocument;
+          if (!doc || !doc.body || !doc.body.children.length) {
+            showFrameMessage(
+              "This site may block embedding",
+              "Some websites refuse to load inside iframes. Try opening it in a new tab.",
+              url
+            );
+          }
+        } catch {
+          showFrameMessage(
+            "This site may block embedding",
+            "Some websites refuse to load inside iframes. Try opening it in a new tab.",
+            url
+          );
+        }
+      }, 1800);
+
       return;
     }
 
-    // 📄 TYPE 2: raw HTML game (GitHub etc.)
-    const res = await fetch(game.url);
-    const html = await res.text();
-
-    if (!html || html.trim().length < 50) {
-      frame.srcdoc = "<h2 style='color:red'>Failed to load game</h2>";
-      return;
-    }
-
-    frame.src = "";
-    frame.srcdoc = html;
-
+    // Fallback for unusual URLs
+    showFrameMessage("Unsupported link", "This link format is not supported.", url);
   } catch (err) {
     console.error(err);
-    frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
+    showFrameMessage("Error loading game", "The game could not be loaded.", game.url);
   }
 }
-  
-  // ── Fullscreen ────────────────────────────────────────────────────────────────
+
+// ── Fullscreen ────────────────────────────────────────────────────────────────
 function fullscreenGame() {
-  if (!frame.src && !frame.srcdoc) {
+  const hasContent = !!frame.src || !!frame.srcdoc;
+  if (!hasContent) {
     alert("Load a game first");
     return;
   }
@@ -720,17 +818,14 @@ function fullscreenGame() {
   else if (frame.msRequestFullscreen) frame.msRequestFullscreen();
 }
 
-
 // ── Search ────────────────────────────────────────────────────────────────────
 searchEl.addEventListener("input", () => {
-  const term = searchEl.value.toLowerCase();
+  const term = searchEl.value.toLowerCase().trim();
   render(games.filter(g => g.name.toLowerCase().includes(term)));
 });
 
-
 // ── Init ──────────────────────────────────────────────────────────────────────
-loadGames();
-</script>
+loadGames();</script>
 </body>
 </html>
  

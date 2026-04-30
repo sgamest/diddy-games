@@ -620,30 +620,46 @@ function launchByKeyword(kw) {
 }
  
 // ── Load games.json — build homepage AFTER load ───────────────────────────────
-async function loadGames() {
-  try {
-    const res = await fetch("games.json");
-    games = await res.json();
-    render(games);
-    buildHomepage(); // <-- only runs once games are available
- 
-    const saved = localStorage.getItem("lastGame");
-    if (saved) {
-      const game = games.find(g => g.name === saved);
-      if (game) {
-        setTimeout(() => {
-          const items = document.querySelectorAll(".game");
-          const index = games.findIndex(g => g.name === saved);
-          if (items[index]) items[index].click();
-        }, 300);
-      }
-    }
-  } catch (e) {
-    listEl.innerHTML = "<div style='padding:12px;color:#ff4d7d;font-size:0.8rem'>Failed to load games.json</div>";
+async function launchGame(game) {
+  document.querySelectorAll(".game").forEach(el => el.classList.remove("active"));
+  const item = listEl.querySelector(`[data-name="${game.name}"]`);
+  if (item) {
+    item.classList.add("active");
+    item.scrollIntoView({ block: "nearest" });
   }
-}
- 
-// ── Render sidebar list (UNCHANGED game loading) ──────────────────────────────
+
+  homepage.classList.remove("active");
+  gameView.classList.add("active");
+  titleEl.textContent = game.name;
+  fsBtn.style.display = "";
+
+  localStorage.setItem("lastGame", game.name);
+
+  try {
+    // 🔥 FIRST try loading as a normal website
+    frame.srcdoc = "";
+    frame.src = game.url;
+
+    // 🧠 After a short delay, fallback to HTML fetch if needed
+    setTimeout(async () => {
+      try {
+        // If iframe failed (blocked or blank), try fetching HTML instead
+        const res = await fetch(game.url);
+        const html = await res.text();
+
+        if (html && html.trim().length > 50) {
+          frame.src = "";
+          frame.srcdoc = html;
+        }
+      } catch (e) {
+        // If fetch fails, just keep iframe attempt
+      }
+    }, 1500);
+
+  } catch (err) {
+    frame.srcdoc = "<h2 style='color:red'>Error loading game</h2>";
+  }
+}// ── Render sidebar list (UNCHANGED game loading) ──────────────────────────────
 function render(data) {
   listEl.innerHTML = "";
   gameCountEl.textContent = data.length + " games";

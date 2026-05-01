@@ -503,7 +503,7 @@
         </svg>
       </div>
       <div>
-        <div class="logo-text">Diddy Games<span class="logo-sub">2.1.0</span></div>
+        <div class="logo-text">Diddy Games<span class="logo-sub">2.1.1</span></div>
       </div>
     </div>
 
@@ -586,7 +586,7 @@
             </div>
           </div>
           <p>Pick from the sidebar — or jump into a favourite below</p>
-          <span class="hero-ver">v1.0</span>
+          <span class="hero-ver">v2.1.1</span>
         </div>
 
         <div class="section-title">⭐ Featured Game</div>
@@ -698,6 +698,8 @@ function showHome() {
   homepage.classList.add('active');
   gameView.classList.remove('active');
   document.querySelectorAll('.game').forEach(el => el.classList.remove('active'));
+  // FIX 1: Save homepage state
+  localStorage.setItem('lastGame', '__home__');
 }
 
 function toggleSidebar() {
@@ -786,16 +788,42 @@ function openGameFallback(url, title, message) {
   `;
 }
 
+// FIX 2: Restore sidebar visibility after fullscreen exit
+// When the browser exits fullscreen, it may resize/repaint and collapse flex children.
+// We track the pre-fullscreen sidebar state and reapply it on exit.
+let sidebarOpenBeforeFs = true;
+document.addEventListener('fullscreenchange', restoreAfterFullscreen);
+document.addEventListener('webkitfullscreenchange', restoreAfterFullscreen);
+document.addEventListener('mozfullscreenchange', restoreAfterFullscreen);
+document.addEventListener('MSFullscreenChange', restoreAfterFullscreen);
 
-  //load games
- async function loadGames() {
+function restoreAfterFullscreen() {
+  const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement
+    || document.mozFullScreenElement || document.msFullscreenElement);
+  if (!isFs) {
+    // exited fullscreen — force sidebar back to its pre-fs state
+    // Small rAF delay ensures the browser has finished painting its resize
+    requestAnimationFrame(() => {
+      sidebarEl.classList.toggle('closed', !sidebarOpen);
+      // Force a reflow of the search box to ensure it re-renders
+      const searchBox = document.querySelector('.search-box');
+      if (searchBox) {
+        searchBox.style.display = 'none';
+        // eslint-disable-next-line no-unused-expressions
+        searchBox.offsetHeight; // trigger reflow
+        searchBox.style.display = '';
+      }
+    });
+  }
+}
+
+async function loadGames() {
   try {
     const res = await fetch('./games.json', { cache: 'no-store' });
     let data = await res.json();
 
     if (!Array.isArray(data)) throw new Error("games.json must be an array");
 
-    // ✅ sort alphabetically
     games = data
       .filter(g => g && g.name && g.url)
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -804,9 +832,11 @@ function openGameFallback(url, title, message) {
     buildHomepage();
     gameCountEl.textContent = `${games.length} games`;
 
-    // restore last game
+    // Restore last session state — including homepage
     const saved = localStorage.getItem('lastGame');
-    if (saved) {
+    if (!saved || saved === '__home__') {
+      // Stay on homepage (already shown by default)
+    } else {
       const game = games.find(g => g.name === saved);
       if (game) setTimeout(() => launchGame(game), 200);
     }
@@ -821,7 +851,7 @@ function openGameFallback(url, title, message) {
     gameCountEl.textContent = '0 games';
   }
 }
-  //launch games
+
 async function launchGame(game) {
   currentGame = game;
 
@@ -836,6 +866,7 @@ async function launchGame(game) {
   gameView.classList.add('active');
   titleEl.textContent = game.name;
   fsBtn.style.display = '';
+  // FIX 1: Save game name (not home)
   localStorage.setItem('lastGame', game.name);
 
   try {
@@ -873,14 +904,13 @@ async function launchGame(game) {
   }
 }
 
-  //fullscreen
 function fullscreenGame() {
   if (!currentGame) {
     alert('Load a game first');
     return;
   }
 
-  const el = document.getElementById('game-view').classList.contains('active') ? frame : document.documentElement;
+  const el = frame;
   if (el.requestFullscreen) el.requestFullscreen();
   else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
   else if (el.msRequestFullscreen) el.msRequestFullscreen();
